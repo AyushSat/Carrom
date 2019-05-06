@@ -6,6 +6,7 @@ import processing.core.PApplet;
  *
  */
 public class GenericGamePiece extends Piece{
+	
 	private int value;
 	
 	public GenericGamePiece(double x, double y, double velX, double velY, double radius, int value) {
