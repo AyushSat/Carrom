@@ -33,7 +33,7 @@ public class GameBoard extends PApplet{
 		queen.setColor(255, 0, 0);
 		pieces.add(queen);
 		
-		Striker striker = new Striker(0, 0, 10);
+		striker = new Striker(0, 0, 10);
 		striker.setColor(0, 255, 0);
 	}
 	
