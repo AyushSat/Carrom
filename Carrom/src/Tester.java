@@ -13,7 +13,7 @@ import processing.core.PApplet;
 public class Tester extends PApplet{
 	private Piece testPiece;
 	public Tester() {
-		testPiece = new GenericGamePiece(500,500,0,0,30,10);
+		testPiece = new GenericGamePiece(500,500,30,10);
 		
 	}
 	
@@ -21,11 +21,15 @@ public class Tester extends PApplet{
 		size(1000,1000);
 	}
 	public void setup() {
-		
+		testPiece.setVelX(15);
+		testPiece.setVelY(15);
 	}
 	public void draw() {
 		background(255);
+		testPiece.move();
 		testPiece.draw(this);
+		fill(0);
+		text("" + testPiece.getVelX() + ", " + testPiece.getVelY(),500,500);
 	}
 	public void keyPressed() {
 		

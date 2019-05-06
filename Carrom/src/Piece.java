@@ -16,7 +16,7 @@ public abstract class Piece {
 	/**An epsilon representing the threshold for motion to be considered not motion.
 	 * 
 	 */
-	public static final double NEGLIGIBLE_VEL = 0.4;
+	public static final double NEGLIGIBLE_VEL = .1;
 	
 	public Piece(double x, double y, double velX, double velY, double radius) {
 		this.x = x;
@@ -56,16 +56,50 @@ public abstract class Piece {
 	public double getRadius() {
 		return this.radius;
 	}
+	public void setVelX(double velX) {
+		this.velX = velX;
+	}
+	public void setVelY(double velY) {
+		this.velY = velY;
+	}
 	
+	/**Tells if the piece is in motion or not
+	 * 
+	 * @return a boolean representing whether the piece is in motion or not
+	 */
+	public boolean isMoving() {
+		return (velX>0 && velY>0);
+	}
 	
+	/**Enacts motion and friction in the X dimension.
+	 * 
+	 */
 	public void moveX() {
 		x+=velX;
-		
-		velX*=0.99;
+		if(velX<NEGLIGIBLE_VEL) {
+			velX = 0;
+		}else {
+			velX *= 0.94;
+		}
 	}
+	/**Enacts motion and friction in the Y dimension.
+	 * 
+	 */
 	public void moveY() {
 		y+=velY;
-		velY*=0.99;
+		if(velY<NEGLIGIBLE_VEL) {
+			velY = 0;
+		}else {
+			velY *= 0.94;
+		}
+	}
+	
+	/**Enacts motion in general.
+	 * 
+	 */
+	public void move() {
+		moveX();
+		moveY();
 	}
 	public abstract void draw(PApplet p);
 }

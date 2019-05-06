@@ -9,8 +9,8 @@ public class GenericGamePiece extends Piece{
 	
 	private int value;
 	
-	public GenericGamePiece(double x, double y, double velX, double velY, double radius, int value) {
-		super(x, y, velX, velY, 50);
+	public GenericGamePiece(double x, double y, double radius, int value) {
+		super(x, y, 0,0, 50);
 		this.value = value;
 		super.setColor(255,0,0);
 		// TODO Auto-generated constructor stub
