@@ -13,6 +13,11 @@ public abstract class Piece {
 	protected double radius;
 	protected int R, G, B;
 	
+	/**An epsilon representing the threshold for motion to be considered not motion.
+	 * 
+	 */
+	public static final double NEGLIGIBLE_VEL = 0.4;
+	
 	public Piece(double x, double y, double velX, double velY, double radius) {
 		this.x = x;
 		this.y = y;
@@ -55,9 +60,12 @@ public abstract class Piece {
 	
 	public void moveX() {
 		x+=velX;
+		
+		velX*=0.99;
 	}
 	public void moveY() {
 		y+=velY;
+		velY*=0.99;
 	}
 	public abstract void draw(PApplet p);
 }

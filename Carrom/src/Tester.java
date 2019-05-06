@@ -27,7 +27,12 @@ public class Tester extends PApplet{
 		background(255);
 		testPiece.draw(this);
 	}
-	
+	public void keyPressed() {
+		
+	}
+	public void mousePressed() {
+		
+	}
 	
 	
 	public static void main(String[] args) {
