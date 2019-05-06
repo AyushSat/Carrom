@@ -21,18 +21,29 @@ public class Tester extends PApplet{
 		size(1000,1000);
 	}
 	public void setup() {
-		testPiece.setVelX(15);
-		testPiece.setVelY(15);
+		testPiece.setVelX(-20);
+		testPiece.setVelY(-20);
 	}
 	public void draw() {
 		background(255);
-		testPiece.move();
+		testPiece.move(this);
 		testPiece.draw(this);
 		fill(0);
 		text("" + testPiece.getVelX() + ", " + testPiece.getVelY(),500,500);
 	}
 	public void keyPressed() {
-		
+		if(keyCode==37) { //left
+			testPiece.setVelX(testPiece.getVelX()-10);
+		}
+		if(keyCode==38) { //up
+			testPiece.setVelY(testPiece.getVelY()-10);
+		}
+		if(keyCode==39) { //right
+			testPiece.setVelX(testPiece.getVelX()+10);
+		}
+		if(keyCode==40) { //down
+			testPiece.setVelY(testPiece.getVelY()+10);
+		}
 	}
 	public void mousePressed() {
 		

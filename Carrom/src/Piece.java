@@ -12,13 +12,14 @@ public abstract class Piece {
 	protected double velY;
 	protected double radius;
 	protected int R, G, B;
+	protected double friction;
 	
 	/**An epsilon representing the threshold for motion to be considered not motion.
 	 * 
 	 */
 	public static final double NEGLIGIBLE_VEL = .1;
 	
-	public Piece(double x, double y, double velX, double velY, double radius) {
+	public Piece(double x, double y, double velX, double velY, double radius,double friction) {
 		this.x = x;
 		this.y = y;
 		this.velX = velX;
@@ -27,6 +28,7 @@ public abstract class Piece {
 		this.R = 0;
 		this.G = 0;
 		this.B = 0;
+		this.friction = friction;
 	}
 	
 	/**Sets the color of the Piece.
@@ -72,34 +74,49 @@ public abstract class Piece {
 	}
 	
 	/**Enacts motion and friction in the X dimension.
-	 * 
+	 * @param p the PApplet it checks for border collision
 	 */
-	public void moveX() {
+	public void moveX(PApplet p) {
 		x+=velX;
-		if(velX<NEGLIGIBLE_VEL) {
+		if(Math.abs(velX)<NEGLIGIBLE_VEL) {
 			velX = 0;
 		}else {
-			velX *= 0.94;
+			velX *= friction;
+		}
+		if(this.x-this.radius < 0) {
+			x = this.radius;
+			velX*=-1;
+		}else if(this.x+this.radius > p.width) {
+			x = p.width - this.radius;
+			velX*=-1;
 		}
 	}
 	/**Enacts motion and friction in the Y dimension.
-	 * 
+	 * @param p the PApplet it checks for border collision
 	 */
-	public void moveY() {
+	public void moveY(PApplet p) {
 		y+=velY;
-		if(velY<NEGLIGIBLE_VEL) {
+		if(Math.abs(velY)<NEGLIGIBLE_VEL) {
 			velY = 0;
 		}else {
-			velY *= 0.94;
+			velY *= friction;
 		}
+		if(this.y-this.radius < 0) {
+			y = this.radius;
+			velY*=-1;
+		}else if(this.y+this.radius > p.height) {
+			y = p.height - this.radius;
+			velY*=-1;
+		}
+		
 	}
 	
 	/**Enacts motion in general.
 	 * 
 	 */
-	public void move() {
-		moveX();
-		moveY();
+	public void move(PApplet p) {
+		moveX(p);
+		moveY(p);
 	}
 	public abstract void draw(PApplet p);
 }
