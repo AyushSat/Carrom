@@ -12,8 +12,10 @@ import processing.core.PApplet;
  */
 public class Tester extends PApplet{
 	private Piece testPiece;
+	private Striker striker;
 	public Tester() {
 		testPiece = new GenericGamePiece(500,500,30,10);
+		striker = new Striker(200,200,10);
 		
 	}
 	
@@ -21,8 +23,6 @@ public class Tester extends PApplet{
 		size(1000,1000);
 	}
 	public void setup() {
-		testPiece.setVelX(-20);
-		testPiece.setVelY(-20);
 	}
 	public void draw() {
 		background(255);
