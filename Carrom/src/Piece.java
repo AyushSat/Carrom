@@ -19,12 +19,12 @@ public abstract class Piece {
 	 */
 	public static final double NEGLIGIBLE_VEL = .1;
 	
-	public Piece(double x, double y, double velX, double velY, double radius,double friction) {
+	public Piece(double x, double y, double radius,double friction) {
 		this.x = x;
 		this.y = y;
-		this.velX = velX;
-		this.velY = velY;
 		this.radius = radius;
+		this.velX = 0;
+		this.velY = 0;
 		this.R = 0;
 		this.G = 0;
 		this.B = 0;
