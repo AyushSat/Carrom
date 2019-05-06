@@ -15,7 +15,7 @@ public class Tester extends PApplet{
 	private Striker striker;
 	public Tester() {
 		testPiece = new GenericGamePiece(500,500,30,10);
-		striker = new Striker(200,200,10);
+		striker = new Striker(200,200,30);
 		
 	}
 	
