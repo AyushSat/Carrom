@@ -13,7 +13,7 @@ public class Carrom {
 	public static void main(String[] args) {
 		
 		//initialize and run sketch
-		GameBoard board = new GameBoard(5, 5);
+		GameBoard board = new GameBoard(9, 9);
 		PApplet.runSketch(new String[]{"Carrom"}, board);
 		
 		PSurfaceAWT surf = (PSurfaceAWT) board.getSurface();

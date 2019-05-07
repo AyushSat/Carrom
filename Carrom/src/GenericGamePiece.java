@@ -10,15 +10,8 @@ public class GenericGamePiece extends Piece{
 	private int value;
 	
 	public GenericGamePiece(double x, double y, double radius, int value) {
-		super(x,y,50,0.98);
+		super(x,y,radius, 0.98);
 		this.value = value;
 		super.setColor(255,0,0);
-		// TODO Auto-generated constructor stub
-	}
-	public void draw(PApplet p) {
-		p.pushStyle();
-		p.fill(R, G, B);
-		p.ellipse((float)x, (float)y, (float)radius, (float)radius);
-		p.popStyle();
 	}
 }
