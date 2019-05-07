@@ -26,25 +26,38 @@ public class Tester extends PApplet{
 	}
 	public void draw() {
 		background(255);
+
+		striker.collide(testPiece);
 		testPiece.move(this);
-		testPiece.draw(this);
 		striker.move(this);
 		striker.draw(this);
-		fill(0);
-		text("" + testPiece.getVelX() + ", " + testPiece.getVelY(),500,500);
+		testPiece.draw(this);
+		
 	}
 	public void keyPressed() {
 		if(keyCode==37) { //left
-			striker.setVelX(testPiece.getVelX()-10);
+			striker.setVelX(striker.getVelX()-10);
 		}
 		if(keyCode==38) { //up
-			striker.setVelY(testPiece.getVelY()-10);
+			striker.setVelY(striker.getVelY()-10);
 		}
 		if(keyCode==39) { //right
-			striker.setVelX(testPiece.getVelX()+10);
+			striker.setVelX(striker.getVelX()+10);
 		}
 		if(keyCode==40) { //down
-			striker.setVelY(testPiece.getVelY()+10);
+			striker.setVelY(striker.getVelY()+10);
+		}
+		if(keyCode==65) { //a
+			testPiece.setVelX(testPiece.getVelX()-10);
+		}
+		if (keyCode == 87) { //w
+			testPiece.setVelY(testPiece.getVelY()-10);
+		}
+		if (keyCode == 83) { //s
+			testPiece.setVelY(testPiece.getVelY()+10);
+		}
+		if (keyCode == 68) { //d
+			testPiece.setVelX(testPiece.getVelX()+10);
 		}
 	}
 	public void mousePressed() {

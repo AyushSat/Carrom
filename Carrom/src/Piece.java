@@ -74,7 +74,7 @@ public abstract class Piece {
 	 * @return a boolean representing whether the piece is in motion or not
 	 */
 	public boolean isMoving() {
-		return (velX>0 && velY>0);
+		return (velX>0 || velY>0);
 	}
 	
 	/**Enacts motion and friction in the X dimension.
@@ -122,10 +122,39 @@ public abstract class Piece {
 		moveX(p);
 		moveY(p);
 	}
+	
+	/**Draws the piece on the PApplet
+	 * 
+	 * @param p the PApplet window to draw on
+	 */
 	public void draw(PApplet p) {
 		p.pushStyle();
 		p.fill(R, G, B);
 		p.ellipse((float)x, (float)y, (float)radius * 2, (float)radius * 2);
 		p.popStyle();
+	}
+	
+	/**This method will determine if two pieces are in contact with one another.
+	 * 
+	 * @param that The piece to check collision with
+	 * @return a boolean representing whether the two pieces are colliding or not.
+	 */
+	public boolean isColliding(Piece that) {
+		return Math.sqrt(Math.pow(this.x-that.x, 2)+Math.pow(this.y-that.y, 2)) <= this.radius + that.radius;
+	}
+	
+	/**This method will make two pieces collide with each other.
+	 * 
+	 * @param that the piece that you are trying to collide with
+	 */
+	public void collide(Piece that) {
+		if(this.isColliding(that) && (this.isMoving() || that.isMoving())) {
+			double thisMass = Math.pow(this.radius,2);
+			double thatMass = Math.pow(that.radius,2);
+			double dX = that.x - this.x;
+			double dY = that.y - this.y;
+			double d = Math.sqrt(Math.pow(dX,2) + Math.pow(dY, 2));
+			
+		}
 	}
 }
