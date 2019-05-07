@@ -76,7 +76,7 @@ public class Tester extends PApplet {
 		
 		striker.setLoc(width/2, height/4 * 3 - 13);
 		
-		board = loadImage("boardOther.png");
+		board = loadImage("boardNew.png");
 	}
 
 	public void draw() {

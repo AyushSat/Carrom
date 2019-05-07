@@ -81,7 +81,7 @@ public class GameBoard extends PApplet {
 		background(255);
 		
 		imageMode(CENTER);
-		image(board, width/2, height/2);
+		image(board, width/2, height/2, width * 0.75f, height * 0.75f);
 		
 		for (GenericGamePiece p : pieces)
 			p.draw(this);
