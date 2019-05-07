@@ -64,6 +64,10 @@ public abstract class Piece {
 	public void setVelY(double velY) {
 		this.velY = velY;
 	}
+	public void setLoc(double x, double y) {
+		this.x = x;
+		this.y = y;
+	}
 	
 	/**Tells if the piece is in motion or not
 	 * 
@@ -118,5 +122,10 @@ public abstract class Piece {
 		moveX(p);
 		moveY(p);
 	}
-	public abstract void draw(PApplet p);
+	public void draw(PApplet p) {
+		p.pushStyle();
+		p.fill(R, G, B);
+		p.ellipse((float)x, (float)y, (float)radius * 2, (float)radius * 2);
+		p.popStyle();
+	}
 }
