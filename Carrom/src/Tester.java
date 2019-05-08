@@ -16,7 +16,8 @@ import processing.event.MouseEvent;
  */
 public class Tester extends PApplet {
 
-	private ArrayList<GenericGamePiece> pieces;
+	private ArrayList<Piece> pieces;
+	private Piece testPiece;
 	private Striker striker;
 	private PImage board;
 
@@ -24,7 +25,7 @@ public class Tester extends PApplet {
 	private static final float BORDER_WIDTH = 28;
 	public Tester(int blacks, int whites) {
 		
-		pieces = new ArrayList<GenericGamePiece>();
+		pieces = new ArrayList<Piece>();
 		GenericGamePiece queen = new GenericGamePiece(0, 0, PIECE_RADIUS, 50);
 		queen.setColor(255, 0, 0);
 		pieces.add(queen);
@@ -39,8 +40,12 @@ public class Tester extends PApplet {
 			white.setColor(255, 220, 150);
 			pieces.add(white);
 		}
-
-		striker = new Striker(0, 0, PIECE_RADIUS*5/3);
+		//this one
+		testPiece = new GenericGamePiece(0,0, PIECE_RADIUS, 20);
+		testPiece.setColor(255, 220, 150);
+		
+		
+		striker = new Striker(0, 0, PIECE_RADIUS*4/3);
 		striker.setColor(0, 255, 0);
 
 	}
@@ -75,7 +80,7 @@ public class Tester extends PApplet {
 		pieces.get(18).setLoc(x - PIECE_RADIUS * Math.sin(Math.PI/3) * 4, y + PIECE_RADIUS * Math.cos(Math.PI/3) * 4);	
 		
 		striker.setLoc(width/2, height/4 * 3 - 13);
-		
+		testPiece.setLoc(width/2, height/4 );
 		board = loadImage("boardOther.png");
 	}
 
@@ -87,20 +92,14 @@ public class Tester extends PApplet {
 		
 		striker.move(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
 		striker.draw(this);
+		testPiece.move(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
+		testPiece.draw(this);
+		striker.collide(testPiece);
 		
-		for(int i = 0; i < pieces.size(); i++) {
-			GenericGamePiece p = pieces.get(i);
-			striker.collide(p);
-			for(int j = i+1; j < pieces.size(); j++) {
-				p.move(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
-				p.draw(this);
-				GenericGamePiece q = pieces.get(j);
-				p.collide(q);
-				q.move(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
-				q.draw(this);
-			}		
+		for(Piece p : pieces) {
+			p.move(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
+			p.draw(this);
 		}
-		
 		
 	}
 	

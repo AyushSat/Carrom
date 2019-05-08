@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 import processing.core.PApplet;
 
 /**Represents a circular piece. It is an interactive, moving piece. 
@@ -91,10 +93,10 @@ public abstract class Piece {
 		}
 		if(this.x-this.radius < minX) {
 			x = this.radius + minX;
-			velX*=-1;
+			velX*=-friction;
 		}else if(this.x+this.radius > maxX) {
 			x = maxX - this.radius;
-			velX*=-1;
+			velX*=-friction;
 		}
 	}
 	
@@ -112,10 +114,10 @@ public abstract class Piece {
 		}
 		if(this.y-this.radius < minY) {
 			y = minY + this.radius;
-			velY*=-1;
+			velY*=-friction;
 		}else if(this.y+this.radius > maxY) {
 			y = maxY - this.radius;
-			velY*=-1;
+			velY*=-friction;
 		}
 		
 	}
@@ -152,9 +154,19 @@ public abstract class Piece {
 		return Math.sqrt(Math.pow(this.x-that.x, 2)+Math.pow(this.y-that.y, 2)) <= this.radius + that.radius;
 	}
 	
-	/**This method will make two pieces collide with each other.
+	/**This method will make one piece collide with many others
 	 * 
-	 * @param that the piece that you are trying to collide with
+	 * @param others the ArrayList of Pieces that this piece should collide with
+	 */
+	public void collide(ArrayList<Piece> others) {
+		for(Piece that : others) {
+			this.collide(that);
+		}
+	}
+	
+	/**this method will make one piece collide with one other.
+	 * 
+	 * @param that the piece that this piece should collide with
 	 */
 	public void collide(Piece that) {
 		if(this.isColliding(that) && (this.isMoving() || that.isMoving())) {
@@ -162,15 +174,26 @@ public abstract class Piece {
 			double thatMass = Math.pow(that.radius,2);
 			double dX = that.x - this.x;
 			double dY = that.y - this.y;
-			double d = Math.sqrt(Math.pow(dX,2) + Math.pow(dY, 2));
+			double dXY = Math.sqrt(Math.pow(dX, 2)+Math.pow(dY, 2));
+			double pSlope = dY/dX;
 			
+			double dvX = that.velX - this.velX;
+			double dvY = that.velY - this.velY;
+			double dV = Math.sqrt(Math.pow(dvX, 2)+Math.pow(dvY, 2));
+			double vSlope = dvY/dvX;
 			
-			double temp = this.velX;
-			this.velX = 0.98*that.velX;
-			that.velX = 0.98*temp;
-			temp = this.velY;
-			this.velY = 0.98*that.velY;
-			that.velY = 0.98*temp;
+			double theta = Math.acos((dX*dvX+dY*dvY)/(dXY*dV));
+			System.out.println(theta);
+			this.velX += dvX*thatMass/thisMass;
+			this.velY += dvY*thatMass/thisMass;
+			that.velX -= dvX*thisMass/thatMass;
+			that.velY -= dvY*thisMass/thatMass;
 		}
+	}
+	
+	//This is just to unclip two pieces
+	//Precondition: that != this and they are actually in collision.
+	private void unCollide(Piece that) {
+		
 	}
 }
