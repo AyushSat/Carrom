@@ -15,6 +15,7 @@ public class GameBoard extends PApplet {
 	private ArrayList<GenericGamePiece> pieces;
 	private Striker striker;
 	private PImage board;
+	private boolean inStriker;
 
 	private static final float PIECE_RADIUS = 14.5f;
 
@@ -38,7 +39,7 @@ public class GameBoard extends PApplet {
 
 		striker = new Striker(0, 0, PIECE_RADIUS*5/3);
 		striker.setColor(0, 255, 0);
-
+		inStriker = false;
 	}
 
 	public void settings() {
@@ -73,7 +74,7 @@ public class GameBoard extends PApplet {
 		
 		striker.setLoc(width/2, height/4 * 3 - 13);
 		
-		board = loadImage("boardOther.png");
+		board = loadImage("boardNew.png");
 	}
 
 	public void draw() {
@@ -88,7 +89,18 @@ public class GameBoard extends PApplet {
 		striker.draw(this);
 	}
 	
+	public void mousePressed() {
+		if(striker.contains(mouseX, mouseY)) {
+			inStriker = true;
+		}
+	}
+	
 	public void mouseDragged() {
-		striker.setLoc(mouseX, mouseY);
+		if(inStriker)
+			striker.setLoc(mouseX, mouseY);
+	}
+	
+	public void mouseReleased() {
+		inStriker = false;
 	}
 }
