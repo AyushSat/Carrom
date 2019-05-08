@@ -14,4 +14,8 @@ public class GenericGamePiece extends Piece{
 		this.value = value;
 		super.setColor(255,0,0);
 	}
+	
+	public int getValue() {
+		return value;
+	}
 }

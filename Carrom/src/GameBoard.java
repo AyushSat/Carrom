@@ -17,6 +17,11 @@ public class GameBoard extends PApplet {
 	private PImage board;
 	private boolean inStriker;
 
+	private PImage black;
+	private PImage white;
+	private PImage red;
+	private PImage s;
+	
 	private static final float PIECE_RADIUS = 14.5f;
 
 	public GameBoard(int blacks, int whites) {
@@ -75,6 +80,10 @@ public class GameBoard extends PApplet {
 		striker.setLoc(width/2, height/4 * 3 - 13);
 		
 		board = loadImage("boardNew.png");
+		black = loadImage("black.png");
+//		white = loadImage("boardNew.png");
+//		red = loadImage("boardNew.png");
+//		s = loadImage("boardNew.png");
 	}
 
 	public void draw() {
@@ -83,10 +92,14 @@ public class GameBoard extends PApplet {
 		imageMode(CENTER);
 		image(board, width/2, height/2, width * 0.75f, height * 0.75f);
 		
-		for (GenericGamePiece p : pieces)
-			p.draw(this);
+		for (GenericGamePiece p : pieces) {
+			if(p.getValue() == 10)
+				p.draw(this, black);
+			else
+				p.draw(this, null);
+		}
 		
-		striker.draw(this);
+		striker.draw(this, null);
 	}
 	
 	public void mousePressed() {
