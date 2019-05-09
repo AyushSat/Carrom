@@ -22,4 +22,8 @@ public class GenericGamePiece extends Piece{
 		}
 		return 0;
 	}
+	
+	public int getValue() {
+		return value;
+	}
 }

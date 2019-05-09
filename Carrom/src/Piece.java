@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 
 import processing.core.PApplet;
+import processing.core.PImage;
 
 /**Represents a circular piece. It is an interactive, moving piece. 
  * 
@@ -24,7 +25,6 @@ public abstract class Piece {
 	 * 
 	 */
 	public static final double EPSILON = 1E-5;
-	
 	
 	public Piece(double x, double y, double radius,double friction) {
 		this.x = x;
@@ -148,6 +148,18 @@ public abstract class Piece {
 		p.fill(R, G, B);
 		p.ellipse((float)x, (float)y, (float)radius * 2, (float)radius * 2);
 		p.popStyle();
+	}
+	/**Draws the piece on the PApplet with an image
+	 * 
+	 * @param p the PApplet window to draw on
+	 * @param i the image that will be drawn for the Piece.
+	 */
+	public void draw(PApplet p, PImage i) {
+		p.pushStyle();
+		p.fill(R, G, B);
+		//p.ellipse((float)x, (float)y, (float)radius * 2, (float)radius * 2);
+		p.popStyle();
+		throw new RuntimeException("Akshat, you need to implement the two-param draw method in the Piece class.");
 	}
 	
 	/**This method will determine if two pieces are in contact with one another.
