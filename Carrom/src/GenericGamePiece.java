@@ -14,4 +14,12 @@ public class GenericGamePiece extends Piece{
 		this.value = value;
 		super.setColor(255,0,0);
 	}
+
+	@Override
+	public int score(double minX, double minY, double maxX, double maxY, double radius) {
+		if((x-this.radius-radius <= minX || x+this.radius+radius >= maxX) && (y-this.radius-radius <= minY || y+this.radius+radius >= maxY)) {
+			return this.value;
+		}
+		return 0;
+	}
 }

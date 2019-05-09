@@ -9,9 +9,9 @@ import processing.core.PImage;
 import processing.event.MouseEvent;
 
 /**
- * PApplet that represents the GameBoard
+ * PApplet for testing purposes
  * 
- * @author Akshat
+ * @author Calix
  * @version 5/6/19
  */
 public class Tester extends PApplet {
@@ -20,11 +20,12 @@ public class Tester extends PApplet {
 	private Piece testPiece;
 	private Striker striker;
 	private PImage board;
+	private int score;
 
 	private static final float PIECE_RADIUS = 14.5f;
 	private static final float BORDER_WIDTH = 28;
 	public Tester(int blacks, int whites) {
-		
+		score = 0;
 		pieces = new ArrayList<Piece>();
 		GenericGamePiece queen = new GenericGamePiece(0, 0, PIECE_RADIUS, 50);
 		queen.setColor(255, 0, 0);
@@ -80,7 +81,8 @@ public class Tester extends PApplet {
 		pieces.get(18).setLoc(x - PIECE_RADIUS * Math.sin(Math.PI/3) * 4, y + PIECE_RADIUS * Math.cos(Math.PI/3) * 4);	
 		
 		striker.setLoc(width/2, height/4 * 3 - 13);
-		testPiece.setLoc(width/2, height/4 );
+		//striker.setLoc(0,0);
+		//testPiece.setLoc(0,0);
 		board = loadImage("boardNew.png");
 	}
 
@@ -90,17 +92,32 @@ public class Tester extends PApplet {
 		imageMode(CENTER);
 		image(board, width/2, height/2, width * 0.75f, height * 0.75f);
 		
+		
+		
+		
+		for(int i = 0; i < pieces.size(); i++) {
+			Piece p = pieces.get(i);
+			striker.collide(p,this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
+			p.move(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
+				
+		}
 		striker.move(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
 		striker.draw(this);
-		testPiece.move(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
-		testPiece.draw(this);
-		striker.collide(testPiece);
-		
-		for(Piece p : pieces) {
-			p.move(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
+		for(int i = 0; i < pieces.size(); i++) {
+			Piece p = pieces.get(i);
 			p.draw(this);
+			int pScore = p.score(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH,4/3*PIECE_RADIUS);
+			if(pScore > 0) {
+				score+=pScore;
+				pieces.remove(p);
+				i--;		
+			}
 		}
-		
+		//testPiece.move(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
+		//testPiece.draw(this);
+		textSize(30);
+		fill(0);
+		text(score,500,100);
 	}
 	
 	public void mouseDragged() {
@@ -118,6 +135,14 @@ public class Tester extends PApplet {
 		}
 		if(keyCode==40) {
 			striker.setVelY(striker.getVelY()+10);
+		}
+		if(keyCode==83) {
+			for(Piece p : pieces) {
+				p.setVelX(0);
+				p.setVelY(0);
+			}
+			striker.setVelX(0);
+			striker.setVelY(0);
 		}
 	}
 	

@@ -20,6 +20,11 @@ public abstract class Piece {
 	 * 
 	 */
 	public static final double NEGLIGIBLE_VEL = .1;
+	/**An epsilon used for double comparisons.
+	 * 
+	 */
+	public static final double EPSILON = 1E-5;
+	
 	
 	public Piece(double x, double y, double radius,double friction) {
 		this.x = x;
@@ -151,16 +156,16 @@ public abstract class Piece {
 	 * @return a boolean representing whether the two pieces are colliding or not.
 	 */
 	public boolean isColliding(Piece that) {
-		return Math.sqrt(Math.pow(this.x-that.x, 2)+Math.pow(this.y-that.y, 2)) <= this.radius + that.radius;
+		return Math.sqrt(Math.pow(this.x-that.x, 2)+Math.pow(this.y-that.y, 2)) < this.radius + that.radius;
 	}
 	
 	/**This method will make one piece collide with many others
 	 * 
 	 * @param others the ArrayList of Pieces that this piece should collide with
 	 */
-	public void collide(ArrayList<Piece> others) {
+	public void collide(ArrayList<Piece> others,double minX, double minY, double maxX, double maxY) {
 		for(Piece that : others) {
-			this.collide(that);
+			this.collide(that, minX, minY, maxX, maxY);
 		}
 	}
 	
@@ -168,32 +173,58 @@ public abstract class Piece {
 	 * 
 	 * @param that the piece that this piece should collide with
 	 */
-	public void collide(Piece that) {
+	public void collide(Piece that, double minX, double minY, double maxX, double maxY) {
+		if(this==that) {//literally equality checking
+			return;
+		}
 		if(this.isColliding(that) && (this.isMoving() || that.isMoving())) {
 			double thisMass = Math.pow(this.radius,2);
 			double thatMass = Math.pow(that.radius,2);
-			double dX = that.x - this.x;
-			double dY = that.y - this.y;
-			double dXY = Math.sqrt(Math.pow(dX, 2)+Math.pow(dY, 2));
-			double pSlope = dY/dX;
 			
-			double dvX = that.velX - this.velX;
-			double dvY = that.velY - this.velY;
-			double dV = Math.sqrt(Math.pow(dvX, 2)+Math.pow(dvY, 2));
-			double vSlope = dvY/dvX;
+			double dX = this.x - that.x;
+			double dY = this.y - that.y;
+			double dXYsq = Math.pow(dX, 2)+Math.pow(dY, 2);
+		
+			double dvX = this.velX - that.velX;
+			double dvY = this.velY - that.velY;
+			//double dV = Math.pow(dvX, 2)+Math.pow(dvY, 2);
 			
-			double theta = Math.acos((dX*dvX+dY*dvY)/(dXY*dV));
-			System.out.println(theta);
-			this.velX += dvX*thatMass/thisMass;
-			this.velY += dvY*thatMass/thisMass;
-			that.velX -= dvX*thisMass/thatMass;
-			that.velY -= dvY*thisMass/thatMass;
+			
+			that.velX = (dX*dvX+dY*dvY)/dXYsq*dX*thisMass/thatMass;
+			that.velY = (dX*dvX+dY*dvY)/dXYsq*dY*thisMass/thatMass;
+			this.velX = (dvX-((dX*dvX+dY*dvY)/dXYsq*dX))*thatMass/thisMass;
+			this.velY = (dvY-((dX*dvX+dY*dvY)/dXYsq*dY))*thatMass/thisMass;
+			
+			that.move(minX, minY, maxX, maxY);
+			this.move(minX, minY, maxX, maxY);
 		}
 	}
 	
 	//This is just to unclip two pieces
-	//Precondition: that != this and they are actually in collision.
+	//Precondition: that != this and they are actually in collision, but are not right on top of each other.
 	private void unCollide(Piece that) {
-		
+		if(this==that) {
+			return;
+		}
+		double dX = that.x - this.x;
+		double dY = that.y - this.y;
+		double dXY = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2));
+		double realD = this.radius + that.radius;
+		double realDX = dX * realD / dXY;
+		double realDY = dY * realD / dXY;
+		this.x -= (1.01)*(realDX - dX);
+		this.y -= (1.01)*(realDY - dY);
 	}
+	
+	/**Gives the score of a piece at where it is, given the bounds of the board and radius of corner holes.
+	 * 
+	 * @param minX left boundary
+	 * @param minY top boundary
+	 * @param maxX right boundary
+	 * @param maxY top boundary
+	 * @param radius radius of the hole in the corner
+	 * @precondition: all parameters must be valid and accurate as to the actual board which the piece is located on
+	 * @return The score that the piece should net at its current XY location in those bounds
+	 */
+	public abstract int score(double minX, double minY, double maxX, double maxY, double radius);
 }
