@@ -50,6 +50,17 @@ public abstract class Piece {
 		this.G = G;
 		this.B = B;
 	}
+	
+	public double getVel() {
+		return Math.sqrt(Math.pow(velY, 2)+Math.pow(velX, 2));
+	}
+	/**Mass times velocity.
+	 * 
+	 * @return Momentum of the piece
+	 */
+	public double getMomentum() {
+		return Math.sqrt(Math.pow(velY, 2)+Math.pow(velX, 2)) * Math.pow(radius, 2);
+	}
 	public double getX() {
 		return this.x;
 	}
@@ -127,6 +138,7 @@ public abstract class Piece {
 		
 	}
 	
+	
 	/**Enacts motion in general
 	 * 
 	 * @param minX The minimum x boundary
@@ -190,25 +202,29 @@ public abstract class Piece {
 			return;
 		}
 		if(this.isColliding(that) && (this.isMoving() || that.isMoving())) {
-			double thisMass = Math.pow(this.radius,2);
-			double thatMass = Math.pow(that.radius,2);
+			if(this.getMomentum()>that.getMomentum()) {
+				double thisMass = Math.pow(this.radius,2);
+				double thatMass = Math.pow(that.radius,2);
+				
+				double dX = this.x - that.x;
+				double dY = this.y - that.y;
+				double dXYsq = Math.pow(dX, 2)+Math.pow(dY, 2);
 			
-			double dX = this.x - that.x;
-			double dY = this.y - that.y;
-			double dXYsq = Math.pow(dX, 2)+Math.pow(dY, 2);
-		
-			double dvX = this.velX - that.velX;
-			double dvY = this.velY - that.velY;
-			//double dV = Math.pow(dvX, 2)+Math.pow(dvY, 2);
-			
-			
-			that.velX = (dX*dvX+dY*dvY)/dXYsq*dX*thisMass/thatMass;
-			that.velY = (dX*dvX+dY*dvY)/dXYsq*dY*thisMass/thatMass;
-			this.velX = (dvX-((dX*dvX+dY*dvY)/dXYsq*dX))*thatMass/thisMass;
-			this.velY = (dvY-((dX*dvX+dY*dvY)/dXYsq*dY))*thatMass/thisMass;
-			
-			that.move(minX, minY, maxX, maxY);
-			this.move(minX, minY, maxX, maxY);
+				double dvX = this.velX - that.velX;
+				double dvY = this.velY - that.velY;
+				//double dV = Math.pow(dvX, 2)+Math.pow(dvY, 2);
+				
+				
+				that.velX = (dX*dvX+dY*dvY)/dXYsq*dX*thisMass/thatMass;
+				that.velY = (dX*dvX+dY*dvY)/dXYsq*dY*thisMass/thatMass;
+				this.velX = (dvX-((dX*dvX+dY*dvY)/dXYsq*dX))*thatMass/thisMass;
+				this.velY = (dvY-((dX*dvX+dY*dvY)/dXYsq*dY))*thatMass/thisMass;
+				
+				that.move(minX, minY, maxX, maxY);
+				this.move(minX, minY, maxX, maxY);
+			}else {
+				that.collide(this, minX, minY, maxX, maxY);
+			}
 		}
 	}
 	
