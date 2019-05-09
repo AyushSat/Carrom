@@ -202,7 +202,7 @@ public abstract class Piece {
 			return;
 		}
 		if(this.isColliding(that) && (this.isMoving() || that.isMoving())) {
-			if(this.getMomentum()>that.getMomentum()) {
+			if(this.getMomentum()>=that.getMomentum()) {
 				double thisMass = Math.pow(this.radius,2);
 				double thatMass = Math.pow(that.radius,2);
 				
