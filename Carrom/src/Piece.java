@@ -25,7 +25,13 @@ public abstract class Piece {
 	 * 
 	 */
 	public static final double EPSILON = 1E-5;
-	
+	/**Instantiates a Piece.
+	 * 
+	 * @param x initial x pos
+	 * @param y initial y pos
+	 * @param radius radius
+	 * @param friction friction value to be used
+	 */
 	public Piece(double x, double y, double radius,double friction) {
 		this.x = x;
 		this.y = y;
@@ -35,6 +41,28 @@ public abstract class Piece {
 		this.R = 0;
 		this.G = 0;
 		this.B = 0;
+		this.friction = friction;
+	}
+	
+	/**Instantiates a piece with color.
+	 * 
+	 * @param x initial x pos
+	 * @param y initial y pos
+	 * @param radius radius
+	 * @param friction friction value to be used
+	 * @param R R value in RGB [0,255] inclusive
+	 * @param G G value in RGB [0,255] inclusive
+	 * @param B B value in RGB [0,255] inclusive
+	 */
+	public Piece(double x, double y, double radius,double friction, int R, int G, int B) {
+		this.x = x;
+		this.y = y;
+		this.radius = radius;
+		this.velX = 0;
+		this.velY = 0;
+		this.R = R;
+		this.G = G;
+		this.B = B;
 		this.friction = friction;
 	}
 	
