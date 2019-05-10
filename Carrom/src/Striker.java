@@ -1,5 +1,10 @@
 import processing.core.PApplet;
 
+/**
+ * 
+ * @author Calix
+ *
+ */
 public class Striker extends Piece{
 
 	/**Instantiates a striker.

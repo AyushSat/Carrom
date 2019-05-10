@@ -110,6 +110,16 @@ public abstract class Piece {
 	public void setVelY(double velY) {
 		this.velY = velY;
 	}
+	
+	/** Sets location of the piece in given boundaries. If outside, it will move to the closest valid point (inside the boundaries).
+	 * 
+	 * @param x the new x location
+	 * @param y the new y location
+	 * @param minX the left boundary
+	 * @param minY the top boundary
+	 * @param maxX the right boundary
+	 * @param maxY the bottom boundary
+	 */
 	public void setLoc(double x, double y, double minX, double minY, double maxX, double maxY) {
 		if(x-radius < minX) {
 			x = minX + radius;
@@ -237,9 +247,13 @@ public abstract class Piece {
 		}
 	}
 	
-	/**this method will make one piece collide with one other.
+	/**Makes one piece collide with another within a certain set of bounds.
 	 * 
-	 * @param that the piece that this piece should collide with
+	 * @param that the other piece
+	 * @param minX left boundary
+	 * @param minY top boundary
+	 * @param maxX right boundary
+	 * @param maxY bottom boundary
 	 */
 	public void collide(Piece that, double minX, double minY, double maxX, double maxY) {
 		if(this==that) {//literally equality checking

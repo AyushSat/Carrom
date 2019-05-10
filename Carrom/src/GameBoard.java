@@ -1,32 +1,34 @@
+import java.awt.Dimension;
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
+
+import processing.awt.PSurfaceAWT;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.event.MouseEvent;
 
 /**
- * PApplet that represents the GameBoard
+ * PApplet for testing purposes
  * 
  * @author Akshat
  * @version 5/6/19
  */
 public class GameBoard extends PApplet {
 
-	private ArrayList<GenericGamePiece> pieces;
+	private ArrayList<Piece> pieces;
+	private Piece testPiece;
 	private Striker striker;
 	private PImage board;
-	private boolean inStriker;
+	private int score;
+	private int turnPhase;
 
-	private PImage black;
-	private PImage white;
-	private PImage red;
-	private PImage s;
-	
 	private static final float PIECE_RADIUS = 14.5f;
-
+	private static final float BORDER_WIDTH = 28;
 	public GameBoard(int blacks, int whites) {
-		
-		pieces = new ArrayList<GenericGamePiece>();
+		score = 0;
+		turnPhase = 0;
+		pieces = new ArrayList<Piece>();
 		GenericGamePiece queen = new GenericGamePiece(0, 0, PIECE_RADIUS, 50);
 		queen.setColor(255, 0, 0);
 		pieces.add(queen);
@@ -34,17 +36,19 @@ public class GameBoard extends PApplet {
 			GenericGamePiece black = new GenericGamePiece(0, 0, PIECE_RADIUS, 10);
 			black.setColor(0, 0, 0);
 			pieces.add(black);
-
 		}
 		for (int i = 0; i < whites; i++) {
 			GenericGamePiece white = new GenericGamePiece(0, 0, PIECE_RADIUS, 20);
 			white.setColor(255, 220, 150);
 			pieces.add(white);
 		}
+		//this one
+		testPiece = new GenericGamePiece(0,0, PIECE_RADIUS, 20);
+		testPiece.setColor(255, 220, 150);
+		
+		
+		striker = new Striker(0, 0, PIECE_RADIUS*4/3,255,255,255);
 
-		striker = new Striker(0, 0, PIECE_RADIUS*5/3);
-		striker.setColor(0, 255, 0);
-		inStriker = false;
 	}
 
 	public void settings() {
@@ -52,11 +56,11 @@ public class GameBoard extends PApplet {
 	}
 
 	public void setup() {
+		frameRate(240);
 		double x = width / 2;
 		double y = height / 2;
 
 		pieces.get(0).setLoc(x, y);
-
 		pieces.get(1).setLoc(x + PIECE_RADIUS * Math.sin(Math.PI/3) * 2, y + PIECE_RADIUS * Math.cos(Math.PI/3) * 2 + PIECE_RADIUS * 2);
 		pieces.get(2).setLoc(x + PIECE_RADIUS * Math.sin(Math.PI/3) * 2, y + PIECE_RADIUS * Math.cos(Math.PI/3) * 2);
 		pieces.get(3).setLoc(x + PIECE_RADIUS * Math.sin(Math.PI/3) * 2 * 2, y);
@@ -78,12 +82,7 @@ public class GameBoard extends PApplet {
 		pieces.get(18).setLoc(x - PIECE_RADIUS * Math.sin(Math.PI/3) * 4, y + PIECE_RADIUS * Math.cos(Math.PI/3) * 4);	
 		
 		striker.setLoc(width/2, height/4 * 3 - 13);
-		
-		board = loadImage("boardNew.png");
-		black = loadImage("black.png");
-//		white = loadImage("boardNew.png");
-//		red = loadImage("boardNew.png");
-//		s = loadImage("boardNew.png");
+		board = loadImage("board.png");
 	}
 
 	public void draw() {
@@ -92,28 +91,141 @@ public class GameBoard extends PApplet {
 		imageMode(CENTER);
 		image(board, width/2, height/2, width * 0.75f, height * 0.75f);
 		
-		for (GenericGamePiece p : pieces) {
-			if(p.getValue() == 10)
-				p.draw(this, black);
-			else
-				p.draw(this, null);
+		if(turnPhase==0) { //only striker is moving
+			striker.draw(this);
+			for(Piece p : pieces) {
+				p.draw(this);
+			}
+		}else if(turnPhase==1) {
+			striker.draw(this);
+			for(Piece p : pieces) {
+				p.draw(this);
+			}
+			double velX = striker.getX()-mouseX;
+			double velY = striker.getY()-mouseY;
+			if(Math.abs(velX)>30) {
+				if(velX>0)
+					velX = 30;
+				else
+					velX = -30;
+			}
+			if(Math.abs(velY)>30) {
+				if(velY>0) 
+					velY = 30;
+				else
+					velY = -30;
+			}
+				
+			striker.setVelX(velX);
+			striker.setVelY(velY);
+			pushStyle();
+			strokeWeight(4);
+			stroke(255);
+			line((float)striker.getX(),(float)striker.getY(),(float)(striker.getX()+2*velX),(float)(striker.getY()+2*velY));
+			popStyle();
+		}else if(turnPhase==2) {
+			for(int i = 0; i < pieces.size(); i++) {
+				Piece p = pieces.get(i);
+				striker.collide(p,this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
+			}
+			striker.move(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
+			striker.draw(this);
+			for(int i = 0; i < pieces.size(); i++) {
+				Piece p = pieces.get(i);
+				//p.draw(this);
+				int pScore = p.score(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH,4/3*PIECE_RADIUS);
+				if(pScore > 0) {
+					score+=pScore;
+					pieces.remove(p);
+					i--;		
+				}
+			}
+			int sScore = striker.score(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH,4/3*PIECE_RADIUS);
+			if(sScore==-1) {
+				if(score>=25) {
+					score-=25;
+				}else {
+					score = 0;
+				}
+				striker.setVelX(0);
+				striker.setVelY(0);
+			}
+			ArrayList<Piece> stationaryPieces = new ArrayList<Piece>();
+			for(int i = 0; i < pieces.size(); i++) {
+				if(!pieces.get(i).isMoving()) {
+					stationaryPieces.add(pieces.remove(i));
+					i--;
+				}
+			}
+			//collision check
+			for(int i = 0; i < pieces.size();i++) {
+				for(int j = i+1; j < pieces.size(); j++) {
+					pieces.get(i).collide(pieces.get(j), this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
+				}
+				for(int k = 0; k < stationaryPieces.size();k++) {
+					pieces.get(i).collide(stationaryPieces.get(k), this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
+				}
+			}
+			for(int i = 0; i < stationaryPieces.size();i++) {
+				pieces.add(stationaryPieces.remove(i));
+				i--;
+			}
+			for(Piece p : pieces) {
+				p.collide(striker, this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
+				p.move(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
+				p.draw(this);
+			}
+			
+			boolean stop = true;
+			for(Piece p : pieces) {
+				if(p.isMoving()) {
+					stop = false;
+				}
+			}
+			if(striker.isMoving()) {
+				stop = false;
+			}
+			if(stop) {
+				striker.setLoc(width/2, height/4 * 3 - 13);
+				turnPhase = 0;
+			}
 		}
-		
-		striker.draw(this, null);
-	}
-	
-	public void mousePressed() {
-		if(striker.contains(mouseX, mouseY)) {
-			inStriker = true;
-		}
+
+		textSize(30);
+		fill(0);
+		text(score,500,100);
 	}
 	
 	public void mouseDragged() {
-		if(inStriker)
-			striker.setLoc(mouseX, mouseY);
 	}
-	
-	public void mouseReleased() {
-		inStriker = false;
+	public void mousePressed() {
+		if(turnPhase==1) {
+			turnPhase=2;
+		}
+		if(turnPhase==0) {
+			striker.setLoc(mouseX, mouseY,this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
+		}
+	}
+	public void keyPressed() {
+		if(keyCode==37 && turnPhase==0) {
+			striker.setLoc(striker.getX()-10, striker.getY(),3*this.width/10-striker.getRadius(),this.height/8+BORDER_WIDTH,7*this.width/10+striker.getRadius(),7*this.height/8-BORDER_WIDTH);
+		}
+		if(keyCode==39 && turnPhase==0) {
+			striker.setLoc(striker.getX()+10, striker.getY(),3*this.width/10-striker.getRadius(),this.height/8+BORDER_WIDTH,7*this.width/10+striker.getRadius(),7*this.height/8-BORDER_WIDTH);
+		}
+		if(keyCode==10 && turnPhase==0) {
+			turnPhase = 1;
+		}
+		if(keyCode==8 && turnPhase==1) {
+			turnPhase = 0;
+		}
+		if(keyCode==83) {
+			for(Piece p : pieces) {
+				p.setVelX(0);
+				p.setVelY(0);
+			}
+			striker.setVelX(0);
+			striker.setVelY(0);
+		}
 	}
 }
