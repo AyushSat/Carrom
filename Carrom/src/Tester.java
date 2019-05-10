@@ -142,6 +142,16 @@ public class Tester extends PApplet {
 					i--;		
 				}
 			}
+			int sScore = striker.score(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH,4/3*PIECE_RADIUS);
+			if(sScore==-1) {
+				if(score>=25) {
+					score-=25;
+				}else {
+					score = 0;
+				}
+				striker.setVelX(0);
+				striker.setVelY(0);
+			}
 			ArrayList<Piece> stationaryPieces = new ArrayList<Piece>();
 			for(int i = 0; i < pieces.size(); i++) {
 				if(!pieces.get(i).isMoving()) {
