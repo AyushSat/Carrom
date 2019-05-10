@@ -8,14 +8,37 @@ import processing.core.PApplet;
 public class GenericGamePiece extends Piece{
 	
 	private int value;
-	
+	/**Instantiates a GenericGamePiece with default color (black)
+	 * 
+	 * @param x the initial x position
+	 * @param y the initial y position
+	 * @param radius the radius of the GenericGamePiece
+	 * @param value the value of the GenericGamePiece (points)
+	 */
 	public GenericGamePiece(double x, double y, double radius, int value) {
 		super(x,y,radius, 0.98);
 		this.value = value;
-		super.setColor(255,0,0);
+		//super.setColor(255,0,0);
 	}
 
-	@Override
+	/** Instantiates a GenericGamePiece with color values passed in.
+	 * 
+	 * @param x the initial x position
+	 * @param y the initial y position
+	 * @param radius the radius of the GenericGamePiece
+	 * @param value the value of the GenericGamePiece (points)
+	 * @param R the R value of RGB, 0-255 inclusive.
+	 * @param G the G value of RGB, 0-255 inclusive.
+	 * @param B the B value of RGB, 0-255 inclusive.
+	 */
+	public GenericGamePiece(double x, double y, double radius, int value, int R, int G, int B) {
+		super(x,y,radius, 0.98, R, G, B);
+		this.value = value;
+	}
+	
+	/**This method checks if the GenericGamePiece should be scored, and if so, returns the value. Else, return 0.
+	 *
+	 */
 	public int score(double minX, double minY, double maxX, double maxY, double radius) {
 		if((x-this.radius-radius <= minX || x+this.radius+radius >= maxX) && (y-this.radius-radius <= minY || y+this.radius+radius >= maxY)) {
 			return this.value;
