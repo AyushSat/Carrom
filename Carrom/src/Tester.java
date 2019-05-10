@@ -21,11 +21,13 @@ public class Tester extends PApplet {
 	private Striker striker;
 	private PImage board;
 	private int score;
+	private int turnPhase;
 
 	private static final float PIECE_RADIUS = 14.5f;
 	private static final float BORDER_WIDTH = 28;
 	public Tester(int blacks, int whites) {
 		score = 0;
+		turnPhase = 0;
 		pieces = new ArrayList<Piece>();
 		GenericGamePiece queen = new GenericGamePiece(0, 0, PIECE_RADIUS, 50);
 		queen.setColor(255, 0, 0);
@@ -34,7 +36,6 @@ public class Tester extends PApplet {
 			GenericGamePiece black = new GenericGamePiece(0, 0, PIECE_RADIUS, 10);
 			black.setColor(0, 0, 0);
 			pieces.add(black);
-
 		}
 		for (int i = 0; i < whites; i++) {
 			GenericGamePiece white = new GenericGamePiece(0, 0, PIECE_RADIUS, 20);
@@ -56,6 +57,7 @@ public class Tester extends PApplet {
 	}
 
 	public void setup() {
+		frameRate(240);
 		double x = width / 2;
 		double y = height / 2;
 
@@ -92,26 +94,95 @@ public class Tester extends PApplet {
 		imageMode(CENTER);
 		image(board, width/2, height/2, width * 0.75f, height * 0.75f);
 		
-		
-		
-		
-		for(int i = 0; i < pieces.size(); i++) {
-			Piece p = pieces.get(i);
-			striker.collide(p,this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
-			p.move(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
-		}
-		striker.move(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
-		striker.draw(this);
-		for(int i = 0; i < pieces.size(); i++) {
-			Piece p = pieces.get(i);
-			p.draw(this);
-			int pScore = p.score(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH,4/3*PIECE_RADIUS);
-			if(pScore > 0) {
-				score+=pScore;
-				pieces.remove(p);
-				i--;		
+		if(turnPhase==0) { //only striker is moving
+			striker.draw(this);
+			for(Piece p : pieces) {
+				p.draw(this);
+			}
+		}else if(turnPhase==1) {
+			striker.draw(this);
+			for(Piece p : pieces) {
+				p.draw(this);
+			}
+			double velX = striker.getX()-mouseX;
+			double velY = striker.getY()-mouseY;
+			if(Math.abs(velX)>30) {
+				if(velX>0)
+					velX = 30;
+				else
+					velX = -30;
+			}
+			if(Math.abs(velY)>30) {
+				if(velY>0) 
+					velY = 30;
+				else
+					velY = -30;
+			}
+				
+			striker.setVelX(velX);
+			striker.setVelY(velY);
+			pushStyle();
+			strokeWeight(4);
+			stroke(255);
+			line((float)striker.getX(),(float)striker.getY(),(float)(striker.getX()+2*velX),(float)(striker.getY()+2*velY));
+			popStyle();
+		}else if(turnPhase==2) {
+			for(int i = 0; i < pieces.size(); i++) {
+				Piece p = pieces.get(i);
+				striker.collide(p,this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
+			}
+			striker.move(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
+			striker.draw(this);
+			for(int i = 0; i < pieces.size(); i++) {
+				Piece p = pieces.get(i);
+				//p.draw(this);
+				int pScore = p.score(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH,4/3*PIECE_RADIUS);
+				if(pScore > 0) {
+					score+=pScore;
+					pieces.remove(p);
+					i--;		
+				}
+			}
+			ArrayList<Piece> stationaryPieces = new ArrayList<Piece>();
+			for(int i = 0; i < pieces.size(); i++) {
+				if(!pieces.get(i).isMoving()) {
+					stationaryPieces.add(pieces.remove(i));
+					i--;
+				}
+			}
+			//collision check
+			for(int i = 0; i < pieces.size();i++) {
+				for(int j = i+1; j < pieces.size(); j++) {
+					pieces.get(i).collide(pieces.get(j), this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
+				}
+				for(int k = 0; k < stationaryPieces.size();k++) {
+					pieces.get(i).collide(stationaryPieces.get(k), this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
+				}
+			}
+			for(int i = 0; i < stationaryPieces.size();i++) {
+				pieces.add(stationaryPieces.remove(i));
+				i--;
+			}
+			for(Piece p : pieces) {
+				p.move(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
+				p.draw(this);
+			}
+			
+			boolean stop = true;
+			for(Piece p : pieces) {
+				if(p.isMoving()) {
+					stop = false;
+				}
+			}
+			if(striker.isMoving()) {
+				stop = false;
+			}
+			if(stop) {
+				striker.setLoc(width/2, height/4 * 3 - 13);
+				turnPhase = 0;
 			}
 		}
+		
 		//testPiece.move(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
 		//testPiece.draw(this);
 		textSize(30);
@@ -122,7 +193,13 @@ public class Tester extends PApplet {
 	public void mouseDragged() {
 		//striker.setLoc(mouseX, mouseY);
 	}
+	public void mousePressed() {
+		if(turnPhase==1) {
+			turnPhase=2;
+		}
+	}
 	public void keyPressed() {
+		/*
 		if(keyCode==37) {
 			striker.setVelX(striker.getVelX()-10);
 		}
@@ -135,6 +212,19 @@ public class Tester extends PApplet {
 		if(keyCode==40) {
 			striker.setVelY(striker.getVelY()+10);
 		}
+		*/
+		if(keyCode==37 && turnPhase==0) {
+			striker.setLoc(striker.getX()-10, striker.getY(), this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
+		}
+		if(keyCode==39 && turnPhase==0) {
+			striker.setLoc(striker.getX()+10, striker.getY(), this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
+		}
+		if(keyCode==10 && turnPhase==0) {
+			turnPhase = 1;
+		}
+		if(keyCode==8 && turnPhase==1) {
+			turnPhase = 0;
+		}
 		if(keyCode==83) {
 			for(Piece p : pieces) {
 				p.setVelX(0);
@@ -143,6 +233,7 @@ public class Tester extends PApplet {
 			striker.setVelX(0);
 			striker.setVelY(0);
 		}
+		//text(keyCode,100,100);
 	}
 	
 	public static void main(String[] args) {

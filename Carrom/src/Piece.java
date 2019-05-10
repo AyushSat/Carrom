@@ -59,7 +59,7 @@ public abstract class Piece {
 	 * @return Momentum of the piece
 	 */
 	public double getMomentum() {
-		return Math.sqrt(Math.pow(velY, 2)+Math.pow(velX, 2)) * Math.pow(radius, 2);
+		return Math.sqrt(Math.pow(velY, 2)+Math.pow(velX, 2)) * Math.pow(radius, 1);
 	}
 	public double getX() {
 		return this.x;
@@ -82,7 +82,23 @@ public abstract class Piece {
 	public void setVelY(double velY) {
 		this.velY = velY;
 	}
-	public void setLoc(double x, double y) {
+	public void setLoc(double x, double y, double minX, double minY, double maxX, double maxY) {
+		if(x-radius < minX) {
+			x = minX + radius;
+		}else if(x+radius > maxX) {
+			x = maxX - radius;
+		}else {
+			this.x = x;
+		}
+		if(y-radius < minY) {
+			y = minY + radius;
+		}else if(y+radius > maxY) {
+			y = maxY - radius;
+		}else {
+			this.y = y;
+		}
+	}
+	public void setLoc(double x, double y ) {
 		this.x = x;
 		this.y = y;
 	}
@@ -203,8 +219,8 @@ public abstract class Piece {
 		}
 		if(this.isColliding(that) && (this.isMoving() || that.isMoving())) {
 			if(this.getMomentum()>=that.getMomentum()) {
-				double thisMass = Math.pow(this.radius,2);
-				double thatMass = Math.pow(that.radius,2);
+				double thisMass = Math.pow(this.radius,1);
+				double thatMass = Math.pow(that.radius,1);
 				
 				double dX = this.x - that.x;
 				double dY = this.y - that.y;
@@ -222,6 +238,7 @@ public abstract class Piece {
 				
 				that.move(minX, minY, maxX, maxY);
 				this.move(minX, minY, maxX, maxY);
+				this.unCollide(that);
 			}else {
 				that.collide(this, minX, minY, maxX, maxY);
 			}
