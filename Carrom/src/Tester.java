@@ -47,8 +47,7 @@ public class Tester extends PApplet {
 		testPiece.setColor(255, 220, 150);
 		
 		
-		striker = new Striker(0, 0, PIECE_RADIUS*4/3);
-		striker.setColor(0, 255, 0);
+		striker = new Striker(0, 0, PIECE_RADIUS*4/3,255,255,255);
 
 	}
 
@@ -164,6 +163,7 @@ public class Tester extends PApplet {
 				i--;
 			}
 			for(Piece p : pieces) {
+				p.collide(striker, this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
 				p.move(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
 				p.draw(this);
 			}
@@ -197,6 +197,9 @@ public class Tester extends PApplet {
 		if(turnPhase==1) {
 			turnPhase=2;
 		}
+		if(turnPhase==0) {
+			striker.setLoc(mouseX, mouseY,this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
+		}
 	}
 	public void keyPressed() {
 		/*
@@ -214,10 +217,10 @@ public class Tester extends PApplet {
 		}
 		*/
 		if(keyCode==37 && turnPhase==0) {
-			striker.setLoc(striker.getX()-10, striker.getY(), this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
+			striker.setLoc(striker.getX()-10, striker.getY(),3*this.width/10-striker.getRadius(),this.height/8+BORDER_WIDTH,7*this.width/10+striker.getRadius(),7*this.height/8-BORDER_WIDTH);
 		}
 		if(keyCode==39 && turnPhase==0) {
-			striker.setLoc(striker.getX()+10, striker.getY(), this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
+			striker.setLoc(striker.getX()+10, striker.getY(),3*this.width/10-striker.getRadius(),this.height/8+BORDER_WIDTH,7*this.width/10+striker.getRadius(),7*this.height/8-BORDER_WIDTH);
 		}
 		if(keyCode==10 && turnPhase==0) {
 			turnPhase = 1;

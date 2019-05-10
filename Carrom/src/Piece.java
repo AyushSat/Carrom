@@ -20,7 +20,7 @@ public abstract class Piece {
 	/**An epsilon representing the threshold for motion to be considered not motion.
 	 * 
 	 */
-	public static final double NEGLIGIBLE_VEL = .1;
+	public static final double NEGLIGIBLE_VEL = .15;
 	/**An epsilon used for double comparisons.
 	 * 
 	 */
@@ -247,6 +247,7 @@ public abstract class Piece {
 		}
 		if(this.isColliding(that) && (this.isMoving() || that.isMoving())) {
 			if(this.getMomentum()>=that.getMomentum()) {
+				this.unCollide(that);
 				double thisMass = Math.pow(this.radius,1);
 				double thatMass = Math.pow(that.radius,1);
 				
