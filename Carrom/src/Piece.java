@@ -116,6 +116,12 @@ public abstract class Piece {
 	public void setVelY(double velY) {
 		this.velY = velY;
 	}
+	public double getInitialX() {
+		return initialX;
+	}
+	public double getInitialY() {
+		return initialY;
+	}
 	
 	/** Sets location of the piece in given boundaries. If outside, it will move to the closest valid point (inside the boundaries).
 	 * 
