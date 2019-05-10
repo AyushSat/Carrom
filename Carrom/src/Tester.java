@@ -17,7 +17,6 @@ import processing.event.MouseEvent;
 public class Tester extends PApplet {
 
 	private ArrayList<Piece> pieces;
-	private Piece testPiece;
 	private Striker striker;
 	private PImage board;
 	private int score;
@@ -42,9 +41,6 @@ public class Tester extends PApplet {
 			white.setColor(255, 220, 150);
 			pieces.add(white);
 		}
-		//this one
-		testPiece = new GenericGamePiece(0,0, PIECE_RADIUS, 20);
-		testPiece.setColor(255, 220, 150);
 		
 		
 		striker = new Striker(0, 0, PIECE_RADIUS*4/3,255,255,255);
@@ -105,17 +101,9 @@ public class Tester extends PApplet {
 			}
 			double velX = striker.getX()-mouseX;
 			double velY = striker.getY()-mouseY;
-			if(Math.abs(velX)>30) {
-				if(velX>0)
-					velX = 30;
-				else
-					velX = -30;
-			}
-			if(Math.abs(velY)>30) {
-				if(velY>0) 
-					velY = 30;
-				else
-					velY = -30;
+			if(Math.pow(velX, 2)+Math.pow(velY, 2) > 9*width/10) {
+				velX *= 3*width/100/Math.sqrt(Math.pow(velX, 2)+Math.pow(velY, 2));
+				velY *= 3*width/100/Math.sqrt(Math.pow(velX, 2)+Math.pow(velY, 2));
 			}
 				
 			striker.setVelX(velX);

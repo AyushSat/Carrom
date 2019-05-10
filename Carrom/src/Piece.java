@@ -9,6 +9,8 @@ import processing.core.PImage;
  *
  */
 public abstract class Piece {
+	protected final double initialX;
+	protected final double initialY;
 	protected double x;
 	protected double y;
 	protected double velX;
@@ -35,6 +37,8 @@ public abstract class Piece {
 	public Piece(double x, double y, double radius,double friction) {
 		this.x = x;
 		this.y = y;
+		this.initialX = x;
+		this.initialY = y;
 		this.radius = radius;
 		this.velX = 0;
 		this.velY = 0;
@@ -57,6 +61,8 @@ public abstract class Piece {
 	public Piece(double x, double y, double radius,double friction, int R, int G, int B) {
 		this.x = x;
 		this.y = y;
+		this.initialX = x;
+		this.initialY = y;
 		this.radius = radius;
 		this.velX = 0;
 		this.velY = 0;
