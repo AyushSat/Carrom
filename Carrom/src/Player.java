@@ -2,6 +2,8 @@ import java.awt.geom.Rectangle2D;
 import java.awt.geom.Rectangle2D.Double;
 import java.util.ArrayList;
 
+import processing.core.PApplet;
+
 /**Represents a player of Carrom
  * 
  * @author Akshat
@@ -16,6 +18,7 @@ public class Player {
 		super();
 		this.striker = striker;
 		this.hitarea = hitarea;
+		this.myPieces = new ArrayList<GenericGamePiece>();
 	}
 	public Striker getStriker() {
 		return striker;
@@ -33,13 +36,16 @@ public class Player {
 	public void addCoin(GenericGamePiece piece) {
 		myPieces.add(piece);
 	}
-	
-	public void removeCoin() {
+	/**Finds the coin of greatest value which the player has pocketed and returns it.
+	 * 
+	 * @return Coin of greatest value pocketed. If no coins have been pocketed, returns null.
+	 */
+	public GenericGamePiece removeCoin() {
 		for(int i = 0;i<myPieces.size();i++) {
 			GenericGamePiece piece = myPieces.get(i);
 			if(piece.getValue() == 50) {
 				myPieces.remove(i);
-				return;
+				return piece;
 			}
 			
 		}
@@ -47,7 +53,7 @@ public class Player {
 			GenericGamePiece piece = myPieces.get(i);
 			if(piece.getValue() == 20) {
 				myPieces.remove(i);
-				return;
+				return piece;
 			}
 		}
 		
@@ -55,10 +61,30 @@ public class Player {
 			GenericGamePiece piece = myPieces.get(i);
 			if(piece.getValue() == 10) {
 				myPieces.remove(i);
-				return;
+				return piece;
 			}
 		}
-		
+		return null;
+	}
+	/**Returns the player's score according to coins pocketed
+	 * 
+	 * @return player score
+	 */
+	public int getScore() {
+		int sum = 0;
+		for(GenericGamePiece p : myPieces) {
+			sum += p.getValue();
+		}
+		return sum;
+	}
+	
+	/**Draws the striker of the player.
+	 * 
+	 * @param p PApplet to draw in
+	 */
+	public void draw(PApplet p) {
+		//striker.setLoc(hitarea.getX()+hitarea.getWidth()/2, hitarea.getY()+hitarea.getHeight()/2, hitarea.getMinX(),hitarea.getMinY(),hitarea.getMaxX(),hitarea.getMaxY());
+		striker.draw(p);
 	}
 	
 }

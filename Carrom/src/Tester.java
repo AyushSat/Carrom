@@ -1,4 +1,5 @@
 import java.awt.Dimension;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -16,35 +17,37 @@ import processing.event.MouseEvent;
  */
 public class Tester extends PApplet {
 
-	private ArrayList<Piece> pieces;
+	private ArrayList<GenericGamePiece> pieces;
+	private ArrayList<Player> players;
 	private Striker striker;
 	private PImage board;
-	private int score;
 	private int turnPhase;
+	private int playerTurn;
 
-	private static final float PIECE_RADIUS = 14.5f;
-	private static final float BORDER_WIDTH = 28;
+	public static final float GenericGamePiece_RADIUS = 14.5f;
+	public static final float BORDER_WIDTH = 28;
+	public static final float MOVEMENT_INCREMENT = 10;
+	
 	public Tester(int blacks, int whites) {
-		score = 0;
+		playerTurn = 0;
 		turnPhase = 0;
-		pieces = new ArrayList<Piece>();
-		GenericGamePiece queen = new GenericGamePiece(0, 0, PIECE_RADIUS, 50);
+		pieces = new ArrayList<GenericGamePiece>();
+		GenericGamePiece queen = new GenericGamePiece(0, 0, GenericGamePiece_RADIUS, 50);
 		queen.setColor(255, 0, 0);
 		pieces.add(queen);
 		for (int i = 0; i < blacks; i++) {
-			GenericGamePiece black = new GenericGamePiece(0, 0, PIECE_RADIUS, 10);
+			GenericGamePiece black = new GenericGamePiece(0, 0, GenericGamePiece_RADIUS, 10);
 			black.setColor(0, 0, 0);
 			pieces.add(black);
 		}
 		for (int i = 0; i < whites; i++) {
-			GenericGamePiece white = new GenericGamePiece(0, 0, PIECE_RADIUS, 20);
+			GenericGamePiece white = new GenericGamePiece(0, 0, GenericGamePiece_RADIUS, 20);
 			white.setColor(255, 220, 150);
 			pieces.add(white);
 		}
+		players = new ArrayList<Player>();
 		
-		
-		striker = new Striker(0, 0, PIECE_RADIUS*4/3,255,255,255);
-
+		striker = new Striker(0, 0, GenericGamePiece_RADIUS*4/3,255,255,255);
 	}
 
 	public void settings() {
@@ -57,46 +60,46 @@ public class Tester extends PApplet {
 		double y = height / 2;
 
 		pieces.get(0).setLoc(x, y);
-		pieces.get(1).setLoc(x + PIECE_RADIUS * Math.sin(Math.PI/3) * 2, y + PIECE_RADIUS * Math.cos(Math.PI/3) * 2 + PIECE_RADIUS * 2);
-		pieces.get(2).setLoc(x + PIECE_RADIUS * Math.sin(Math.PI/3) * 2, y + PIECE_RADIUS * Math.cos(Math.PI/3) * 2);
-		pieces.get(3).setLoc(x + PIECE_RADIUS * Math.sin(Math.PI/3) * 2 * 2, y);
-		pieces.get(4).setLoc(x + PIECE_RADIUS * Math.sin(Math.PI/3) * 2, y - PIECE_RADIUS * 2 - PIECE_RADIUS * Math.cos(Math.PI/3) * 2);
-		pieces.get(5).setLoc(x, y - PIECE_RADIUS * 2);
-		pieces.get(6).setLoc(x - PIECE_RADIUS * Math.sin(Math.PI/3) * 2, y - PIECE_RADIUS * 2 - PIECE_RADIUS * Math.cos(Math.PI/3) * 2);
-		pieces.get(7).setLoc(x - PIECE_RADIUS * Math.sin(Math.PI/3) * 2 * 2, y);
-		pieces.get(8).setLoc(x - PIECE_RADIUS * Math.sin(Math.PI/3) * 2, y + PIECE_RADIUS * Math.cos(Math.PI/3) * 2);
-		pieces.get(9).setLoc(x - PIECE_RADIUS * Math.sin(Math.PI/3) * 2, y + PIECE_RADIUS * Math.cos(Math.PI/3) * 2 + PIECE_RADIUS * 2);
+		pieces.get(1).setLoc(x + GenericGamePiece_RADIUS * Math.sin(Math.PI/3) * 2, y + GenericGamePiece_RADIUS * Math.cos(Math.PI/3) * 2 + GenericGamePiece_RADIUS * 2);
+		pieces.get(2).setLoc(x + GenericGamePiece_RADIUS * Math.sin(Math.PI/3) * 2, y + GenericGamePiece_RADIUS * Math.cos(Math.PI/3) * 2);
+		pieces.get(3).setLoc(x + GenericGamePiece_RADIUS * Math.sin(Math.PI/3) * 2 * 2, y);
+		pieces.get(4).setLoc(x + GenericGamePiece_RADIUS * Math.sin(Math.PI/3) * 2, y - GenericGamePiece_RADIUS * 2 - GenericGamePiece_RADIUS * Math.cos(Math.PI/3) * 2);
+		pieces.get(5).setLoc(x, y - GenericGamePiece_RADIUS * 2);
+		pieces.get(6).setLoc(x - GenericGamePiece_RADIUS * Math.sin(Math.PI/3) * 2, y - GenericGamePiece_RADIUS * 2 - GenericGamePiece_RADIUS * Math.cos(Math.PI/3) * 2);
+		pieces.get(7).setLoc(x - GenericGamePiece_RADIUS * Math.sin(Math.PI/3) * 2 * 2, y);
+		pieces.get(8).setLoc(x - GenericGamePiece_RADIUS * Math.sin(Math.PI/3) * 2, y + GenericGamePiece_RADIUS * Math.cos(Math.PI/3) * 2);
+		pieces.get(9).setLoc(x - GenericGamePiece_RADIUS * Math.sin(Math.PI/3) * 2, y + GenericGamePiece_RADIUS * Math.cos(Math.PI/3) * 2 + GenericGamePiece_RADIUS * 2);
 		
-		pieces.get(10).setLoc(x, y + PIECE_RADIUS * 4);
-		pieces.get(11).setLoc(x, y + PIECE_RADIUS * 2);
-		pieces.get(12).setLoc(x + PIECE_RADIUS * Math.sin(Math.PI/3) * 4, y - PIECE_RADIUS * Math.cos(Math.PI/3) * 4);
-		pieces.get(13).setLoc(x + PIECE_RADIUS * Math.sin(Math.PI/3) * 2, y - PIECE_RADIUS * Math.cos(Math.PI/3) * 2);
-		pieces.get(14).setLoc(x - PIECE_RADIUS * Math.sin(Math.PI/3) * 4, y - PIECE_RADIUS * Math.cos(Math.PI/3) * 4);
-		pieces.get(15).setLoc(x - PIECE_RADIUS * Math.sin(Math.PI/3) * 2, y - PIECE_RADIUS * Math.cos(Math.PI/3) * 2);
-		pieces.get(16).setLoc(x + PIECE_RADIUS * Math.sin(Math.PI/3) * 4, y + PIECE_RADIUS * Math.cos(Math.PI/3) * 4);
-		pieces.get(17).setLoc(x, y - PIECE_RADIUS * 4);
-		pieces.get(18).setLoc(x - PIECE_RADIUS * Math.sin(Math.PI/3) * 4, y + PIECE_RADIUS * Math.cos(Math.PI/3) * 4);	
+		pieces.get(10).setLoc(x, y + GenericGamePiece_RADIUS * 4);
+		pieces.get(11).setLoc(x, y + GenericGamePiece_RADIUS * 2);
+		pieces.get(12).setLoc(x + GenericGamePiece_RADIUS * Math.sin(Math.PI/3) * 4, y - GenericGamePiece_RADIUS * Math.cos(Math.PI/3) * 4);
+		pieces.get(13).setLoc(x + GenericGamePiece_RADIUS * Math.sin(Math.PI/3) * 2, y - GenericGamePiece_RADIUS * Math.cos(Math.PI/3) * 2);
+		pieces.get(14).setLoc(x - GenericGamePiece_RADIUS * Math.sin(Math.PI/3) * 4, y - GenericGamePiece_RADIUS * Math.cos(Math.PI/3) * 4);
+		pieces.get(15).setLoc(x - GenericGamePiece_RADIUS * Math.sin(Math.PI/3) * 2, y - GenericGamePiece_RADIUS * Math.cos(Math.PI/3) * 2);
+		pieces.get(16).setLoc(x + GenericGamePiece_RADIUS * Math.sin(Math.PI/3) * 4, y + GenericGamePiece_RADIUS * Math.cos(Math.PI/3) * 4);
+		pieces.get(17).setLoc(x, y - GenericGamePiece_RADIUS * 4);
+		pieces.get(18).setLoc(x - GenericGamePiece_RADIUS * Math.sin(Math.PI/3) * 4, y + GenericGamePiece_RADIUS * Math.cos(Math.PI/3) * 4);	
 		
 		striker.setLoc(width/2, height/4 * 3 - 13);
-		//striker.setLoc(0,0);
-		//testPiece.setLoc(0,0);
+		players.add(new Player(striker,new Rectangle2D.Double(3*this.width/10-striker.getRadius(),height/4 + 13 - striker.getRadius(),11*this.width/25,2*striker.getRadius())));
+		players.add(new Player(striker,new Rectangle2D.Double(3*this.width/10-striker.getRadius(),height/4 * 3 - 13 + striker.getRadius(),11 *this.width/25,2*striker.getRadius())));
 		board = loadImage("board.png");
 	}
 
 	public void draw() {
-		background(255);
-		
+		Player player = players.get(playerTurn);
+		background(255);	
 		imageMode(CENTER);
 		image(board, width/2, height/2, width * 0.75f, height * 0.75f);
 		
-		if(turnPhase==0) { //only striker is moving
-			striker.draw(this);
-			for(Piece p : pieces) {
+		if(turnPhase==0) {
+			player.draw(this);
+			for(GenericGamePiece p : pieces) {
 				p.draw(this);
 			}
 		}else if(turnPhase==1) {
-			striker.draw(this);
-			for(Piece p : pieces) {
+			players.get(0).draw(this);
+			for(GenericGamePiece p : pieces) {
 				p.draw(this);
 			}
 			double velX = striker.getX()-mouseX;
@@ -115,35 +118,34 @@ public class Tester extends PApplet {
 			popStyle();
 		}else if(turnPhase==2) {
 			for(int i = 0; i < pieces.size(); i++) {
-				Piece p = pieces.get(i);
+				GenericGamePiece p = pieces.get(i);
 				striker.collide(p,this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
 			}
 			striker.move(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
 			striker.draw(this);
 			for(int i = 0; i < pieces.size(); i++) {
-				Piece p = pieces.get(i);
+				GenericGamePiece p = pieces.get(i);
 				//p.draw(this);
-				int pScore = p.score(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH,4/3*PIECE_RADIUS);
+				int pScore = p.score(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH,4/3*GenericGamePiece_RADIUS);
 				if(pScore > 0) {
-					score+=pScore;
+					player.addCoin(p);
 					pieces.remove(p);
 					i--;		
 				}
 			}
-			int sScore = striker.score(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH,4/3*PIECE_RADIUS);
+			int sScore = striker.score(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH,4/3*GenericGamePiece_RADIUS);
 			if(sScore==-1) {
-				if(score>=25) {
-					score-=25;
-				}else {
-					score = 0;
+				for(GenericGamePiece p : pieces) {
+					p.setVelX(0);
+					p.setVelY(0);
 				}
 				striker.setVelX(0);
 				striker.setVelY(0);
 			}
-			ArrayList<Piece> stationaryPieces = new ArrayList<Piece>();
+			ArrayList<GenericGamePiece> stationarypieces = new ArrayList<GenericGamePiece>();
 			for(int i = 0; i < pieces.size(); i++) {
 				if(!pieces.get(i).isMoving()) {
-					stationaryPieces.add(pieces.remove(i));
+					stationarypieces.add(pieces.remove(i));
 					i--;
 				}
 			}
@@ -152,22 +154,22 @@ public class Tester extends PApplet {
 				for(int j = i+1; j < pieces.size(); j++) {
 					pieces.get(i).collide(pieces.get(j), this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
 				}
-				for(int k = 0; k < stationaryPieces.size();k++) {
-					pieces.get(i).collide(stationaryPieces.get(k), this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
+				for(int k = 0; k < stationarypieces.size();k++) {
+					pieces.get(i).collide(stationarypieces.get(k), this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
 				}
 			}
-			for(int i = 0; i < stationaryPieces.size();i++) {
-				pieces.add(stationaryPieces.remove(i));
+			for(int i = 0; i < stationarypieces.size();i++) {
+				pieces.add(stationarypieces.remove(i));
 				i--;
 			}
-			for(Piece p : pieces) {
+			for(GenericGamePiece p : pieces) {
 				p.collide(striker, this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
 				p.move(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
 				p.draw(this);
 			}
 			
 			boolean stop = true;
-			for(Piece p : pieces) {
+			for(GenericGamePiece p : pieces) {
 				if(p.isMoving()) {
 					stop = false;
 				}
@@ -176,16 +178,18 @@ public class Tester extends PApplet {
 				stop = false;
 			}
 			if(stop) {
-				striker.setLoc(width/2, height/4 * 3 - 13);
+				striker.setLoc(player.getHitarea().getX()+player.getHitarea().getWidth()/2, player.getHitarea().getY()+player.getHitarea().getHeight()/2);
 				turnPhase = 0;
+				playerTurn = (playerTurn+1) % players.size();
 			}
 		}
 		
-		//testPiece.move(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
-		//testPiece.draw(this);
+		//testGenericGamePiece.move(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
+		//testGenericGamePiece.draw(this);
 		textSize(30);
 		fill(0);
-		text(score,500,100);
+		textAlign(CENTER,CENTER);
+		text("Player 1 score: " + players.get(0).getScore() + "                      Player 2 score: " + players.get(1).getScore(),width/2,height/10);
 	}
 	
 	public void mouseDragged() {
@@ -200,34 +204,30 @@ public class Tester extends PApplet {
 		}
 	}
 	public void keyPressed() {
-		/*
-		if(keyCode==37) {
-			striker.setVelX(striker.getVelX()-10);
-		}
-		if(keyCode==38) {
-			striker.setVelY(striker.getVelY()-10);
-		}
-		if(keyCode==39) {
-			striker.setVelX(striker.getVelX()+10);
-		}
-		if(keyCode==40) {
-			striker.setVelY(striker.getVelY()+10);
-		}
-		*/
-		if(keyCode==37 && turnPhase==0) {
-			striker.setLoc(striker.getX()-10, striker.getY(),3*this.width/10-striker.getRadius(),this.height/8+BORDER_WIDTH,7*this.width/10+striker.getRadius(),7*this.height/8-BORDER_WIDTH);
-		}
-		if(keyCode==39 && turnPhase==0) {
-			striker.setLoc(striker.getX()+10, striker.getY(),3*this.width/10-striker.getRadius(),this.height/8+BORDER_WIDTH,7*this.width/10+striker.getRadius(),7*this.height/8-BORDER_WIDTH);
-		}
-		if(keyCode==10 && turnPhase==0) {
-			turnPhase = 1;
+		if(turnPhase==0) {
+			Player player = players.get(playerTurn);
+			Rectangle2D.Double bounds = player.getHitarea();
+			if(keyCode==37) {
+				striker.setLoc(striker.getX()-MOVEMENT_INCREMENT, striker.getY(),bounds.getMinX(),bounds.getMinY(),bounds.getMaxX(),bounds.getMaxY());
+			}
+			if(keyCode==39) {
+				striker.setLoc(striker.getX()+MOVEMENT_INCREMENT, striker.getY(),bounds.getMinX(),bounds.getMinY(),bounds.getMaxX(),bounds.getMaxY());
+			}
+			if(keyCode==38) {
+				striker.setLoc(striker.getX(), striker.getY()-MOVEMENT_INCREMENT,bounds.getMinX(),bounds.getMinY(),bounds.getMaxX(),bounds.getMaxY());
+			}
+			if(keyCode==40) {
+				striker.setLoc(striker.getX(),striker.getY()+MOVEMENT_INCREMENT,bounds.getMinX(),bounds.getMinY(),bounds.getMaxX(),bounds.getMaxY());
+			}
+			if(keyCode==10) {
+				turnPhase = 1;
+			}
 		}
 		if(keyCode==8 && turnPhase==1) {
 			turnPhase = 0;
 		}
 		if(keyCode==83) {
-			for(Piece p : pieces) {
+			for(GenericGamePiece p : pieces) {
 				p.setVelX(0);
 				p.setVelY(0);
 			}
