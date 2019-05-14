@@ -1,5 +1,6 @@
 import java.awt.Dimension;
 import java.awt.geom.Rectangle2D;
+import java.io.File;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -21,6 +22,9 @@ public class Tester extends PApplet {
 	private ArrayList<Player> players;
 	private Striker striker;
 	private PImage board;
+	private PImage black;
+	private PImage red;
+	private PImage white;
 	private int turnPhase;
 	private int playerTurn;
 
@@ -83,7 +87,10 @@ public class Tester extends PApplet {
 		striker.setLoc(width/2, height/4 * 3 - 13);
 		players.add(new Player(striker,new Rectangle2D.Double(3*this.width/10-striker.getRadius(),height/4 + 13 - striker.getRadius(),11*this.width/25,2*striker.getRadius())));
 		players.add(new Player(striker,new Rectangle2D.Double(3*this.width/10-striker.getRadius(),height/4 * 3 - 13 + striker.getRadius(),11 *this.width/25,2*striker.getRadius())));
-		board = loadImage("board.png");
+		board = loadImage("data" + File.separator + "board.png");
+		black = loadImage("data" + File.separator + "black.png");
+		white = loadImage("data" + File.separator + "white.png");
+		red = loadImage("data" + File.separator + "red.png");
 	}
 
 	public void draw() {
@@ -95,12 +102,22 @@ public class Tester extends PApplet {
 		if(turnPhase==0) {
 			player.draw(this);
 			for(GenericGamePiece p : pieces) {
-				p.draw(this);
+				if(p.getValue() == 10)
+					p.draw(this, black);
+				else if(p.getValue() == 20)
+					p.draw(this, white);
+				else
+					p.draw(this, red);
 			}
 		}else if(turnPhase==1) {
 			players.get(0).draw(this);
 			for(GenericGamePiece p : pieces) {
-				p.draw(this);
+				if(p.getValue() == 10)
+					p.draw(this, black);
+				else if(p.getValue() == 20)
+					p.draw(this, white);
+				else
+					p.draw(this, red);
 			}
 			double velX = striker.getX()-mouseX;
 			double velY = striker.getY()-mouseY;
@@ -165,7 +182,12 @@ public class Tester extends PApplet {
 			for(GenericGamePiece p : pieces) {
 				p.collide(striker, this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
 				p.move(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
-				p.draw(this);
+				if(p.getValue() == 10)
+					p.draw(this, black);
+				else if(p.getValue() == 20)
+					p.draw(this, white);
+				else
+					p.draw(this, red);
 			}
 			
 			boolean stop = true;
