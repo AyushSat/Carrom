@@ -89,6 +89,7 @@ public class GameBoard extends PApplet {
 		board = loadImage("data" + File.separator + "board.png");
 		black = loadImage("data" + File.separator + "black.png");
 		white = loadImage("data" + File.separator + "white.png");
+		red = loadImage("data" + File.separator + "red.png");
 	}
 
 	public void draw() {
@@ -102,16 +103,20 @@ public class GameBoard extends PApplet {
 			for(GenericGamePiece p : pieces) {
 				if(p.getValue() == 10)
 					p.draw(this, black);
-				else
+				else if(p.getValue() == 20)
 					p.draw(this, white);
+				else
+					p.draw(this, red);
 			}
 		}else if(turnPhase==1) {
 			striker.draw(this);
 			for(GenericGamePiece p : pieces) {
 				if(p.getValue() == 10)
 					p.draw(this, black);
-				else
+				else if(p.getValue() == 20)
 					p.draw(this, white);
+				else
+					p.draw(this, red);
 			}
 			double velX = striker.getX()-mouseX;
 			double velY = striker.getY()-mouseY;
@@ -187,8 +192,10 @@ public class GameBoard extends PApplet {
 				p.move(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
 				if(p.getValue() == 10)
 					p.draw(this, black);
-				else
+				else if(p.getValue() == 20)
 					p.draw(this, white);
+				else
+					p.draw(this, red);
 			}
 			
 			boolean stop = true;
