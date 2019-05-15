@@ -89,8 +89,10 @@ public class Tester extends PApplet {
 		for(GenericGamePiece p : pieces) {
 			p.setInitLoc(x,y);
 		}
-		players.add(new Player(striker,new Rectangle2D.Double(3*this.width/10-striker.getRadius(),height/1000 * 245,11 *this.width/25,2*striker.getRadius())));
-		players.add(new Player(striker,new Rectangle2D.Double(3*this.width/10-striker.getRadius(),height/1000 * 737 - striker.getRadius(),11*this.width/25,2*striker.getRadius())));
+		players.add(new Player(striker,new Rectangle2D.Double(3*this.width/10-striker.getRadius(),height*.245,11 *this.width/25,2*striker.getRadius())));
+		players.add(new Player(striker,new Rectangle2D.Double(3*this.width/10-striker.getRadius(),height*.717,11*this.width/25,2*striker.getRadius())));
+		//players.add(new Player(striker,new Rectangle2D.Double(.245*this.width,height/1000 * 245+2*striker.getRadius(),2*striker.getRadius(),11*this.height/25)));
+		//players.add(new Player(striker,new Rectangle2D.Double(.716*this.width,height/1000 * 245+2*striker.getRadius(),2*striker.getRadius(),11*this.height/25)));
 		striker.setLoc(players.get(0).getHitarea().getX()+players.get(0).getHitarea().getWidth()/2, players.get(0).getHitarea().getY()+players.get(0).getHitarea().getHeight()/2);
 		board = loadImage("data" + File.separator + "board.png");
 		black = loadImage("data" + File.separator + "black.png");
