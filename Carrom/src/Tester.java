@@ -25,6 +25,7 @@ public class Tester extends PApplet {
 	private PImage black;
 	private PImage red;
 	private PImage white;
+	private PImage s;
 	private boolean chainTurn;
 	private int turnPhase;
 	private int playerTurn;
@@ -89,13 +90,16 @@ public class Tester extends PApplet {
 		for(GenericGamePiece p : pieces) {
 			p.setInitLoc(x,y);
 		}
-		players.add(new Player(striker,new Rectangle2D.Double(3*this.width/10-striker.getRadius(),height/1000 * 245,11 *this.width/25,2*striker.getRadius())));
-		players.add(new Player(striker,new Rectangle2D.Double(3*this.width/10-striker.getRadius(),height/1000 * 737 - striker.getRadius(),11*this.width/25,2*striker.getRadius())));
+		players.add(new Player(striker,new Rectangle2D.Double(3*this.width/10-striker.getRadius(),height*.245,11 *this.width/25,2*striker.getRadius())));
+		players.add(new Player(striker,new Rectangle2D.Double(3*this.width/10-striker.getRadius(),height*.717,11*this.width/25,2*striker.getRadius())));
+		//players.add(new Player(striker,new Rectangle2D.Double(.245*this.width,height/1000 * 245+2*striker.getRadius(),2*striker.getRadius(),11*this.height/25)));
+		//players.add(new Player(striker,new Rectangle2D.Double(.716*this.width,height/1000 * 245+2*striker.getRadius(),2*striker.getRadius(),11*this.height/25)));
 		striker.setLoc(players.get(0).getHitarea().getX()+players.get(0).getHitarea().getWidth()/2, players.get(0).getHitarea().getY()+players.get(0).getHitarea().getHeight()/2);
 		board = loadImage("data" + File.separator + "board.png");
 		black = loadImage("data" + File.separator + "black.png");
 		white = loadImage("data" + File.separator + "white.png");
 		red = loadImage("data" + File.separator + "red.png");
+		s = loadImage("data" + File.separator + "striker.png");
 	}
 
 	public void draw() {
@@ -109,7 +113,8 @@ public class Tester extends PApplet {
 
 		if(turnPhase==0) {
 			chainTurn = false;
-			player.draw(this);
+			//player.draw(this,s);
+			striker.draw(this,s);
 			for(GenericGamePiece p : pieces) {
 				if(p.getValue() == 10)
 					p.draw(this, black);
@@ -119,7 +124,8 @@ public class Tester extends PApplet {
 					p.draw(this, red);
 			}
 		}else if(turnPhase==1) {
-			players.get(0).draw(this);
+			//players.get(0).draw(this);
+			striker.draw(this,s);
 			for(GenericGamePiece p : pieces) {
 				if(p.getValue() == 10)
 					p.draw(this, black);
@@ -148,7 +154,7 @@ public class Tester extends PApplet {
 				striker.collide(p,this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
 			}
 			striker.move(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
-			striker.draw(this);
+			striker.draw(this,s);
 			int totalScoreForTurn = 0;
 			for(int i = 0; i < pieces.size(); i++) {
 				GenericGamePiece p = pieces.get(i);
