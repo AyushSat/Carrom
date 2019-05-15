@@ -34,6 +34,10 @@ public class Tester extends PApplet {
 	public static final float MOVEMENT_INCREMENT = 10;
 	
 	public Tester(int blacks, int whites) {
+		board = loadImage("data" + File.separator + "board.png");
+		black = loadImage("data" + File.separator + "black.png");
+		white = loadImage("data" + File.separator + "white.png");
+		red = loadImage("data" + File.separator + "red.png");
 		chainTurn = false;
 		playerTurn = 0;
 		turnPhase = 0;
@@ -92,10 +96,7 @@ public class Tester extends PApplet {
 		players.add(new Player(striker,new Rectangle2D.Double(3*this.width/10-striker.getRadius(),height/1000 * 245,11 *this.width/25,2*striker.getRadius())));
 		players.add(new Player(striker,new Rectangle2D.Double(3*this.width/10-striker.getRadius(),height/1000 * 737 - striker.getRadius(),11*this.width/25,2*striker.getRadius())));
 		striker.setLoc(players.get(0).getHitarea().getX()+players.get(0).getHitarea().getWidth()/2, players.get(0).getHitarea().getY()+players.get(0).getHitarea().getHeight()/2);
-		board = loadImage("data" + File.separator + "board.png");
-		black = loadImage("data" + File.separator + "black.png");
-		white = loadImage("data" + File.separator + "white.png");
-		red = loadImage("data" + File.separator + "red.png");
+		
 	}
 
 	public void draw() {
