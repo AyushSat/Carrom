@@ -25,6 +25,7 @@ public class Tester extends PApplet {
 	private PImage black;
 	private PImage red;
 	private PImage white;
+	private boolean chainTurn;
 	private int turnPhase;
 	private int playerTurn;
 
@@ -33,6 +34,7 @@ public class Tester extends PApplet {
 	public static final float MOVEMENT_INCREMENT = 10;
 	
 	public Tester(int blacks, int whites) {
+		chainTurn = false;
 		playerTurn = 0;
 		turnPhase = 0;
 		pieces = new ArrayList<GenericGamePiece>();
@@ -84,9 +86,12 @@ public class Tester extends PApplet {
 		pieces.get(17).setLoc(x, y - GenericGamePiece_RADIUS * 4);
 		pieces.get(18).setLoc(x - GenericGamePiece_RADIUS * Math.sin(Math.PI/3) * 4, y + GenericGamePiece_RADIUS * Math.cos(Math.PI/3) * 4);	
 		
-		striker.setLoc(width/2, height/4 * 3 - 13);
-		players.add(new Player(striker,new Rectangle2D.Double(3*this.width/10-striker.getRadius(),height/4 + 13 - striker.getRadius(),11*this.width/25,2*striker.getRadius())));
-		players.add(new Player(striker,new Rectangle2D.Double(3*this.width/10-striker.getRadius(),height/4 * 3 - 13 + striker.getRadius(),11 *this.width/25,2*striker.getRadius())));
+		for(GenericGamePiece p : pieces) {
+			p.setInitLoc(x,y);
+		}
+		players.add(new Player(striker,new Rectangle2D.Double(3*this.width/10-striker.getRadius(),height/1000 * 245,11 *this.width/25,2*striker.getRadius())));
+		players.add(new Player(striker,new Rectangle2D.Double(3*this.width/10-striker.getRadius(),height/1000 * 737 - striker.getRadius(),11*this.width/25,2*striker.getRadius())));
+		striker.setLoc(players.get(0).getHitarea().getX()+players.get(0).getHitarea().getWidth()/2, players.get(0).getHitarea().getY()+players.get(0).getHitarea().getHeight()/2);
 		board = loadImage("data" + File.separator + "board.png");
 		black = loadImage("data" + File.separator + "black.png");
 		white = loadImage("data" + File.separator + "white.png");
@@ -94,12 +99,16 @@ public class Tester extends PApplet {
 	}
 
 	public void draw() {
+
 		Player player = players.get(playerTurn);
-		background(255);	
-		imageMode(CENTER);
-		image(board, width/2, height/2, width * 0.75f, height * 0.75f);
-		
+		background(255);
+		if(turnPhase!=3) {
+			imageMode(CENTER);
+			image(board, width / 2, height / 2, width * 0.75f, height * 0.75f);
+		}
+
 		if(turnPhase==0) {
+			chainTurn = false;
 			player.draw(this);
 			for(GenericGamePiece p : pieces) {
 				if(p.getValue() == 10)
@@ -140,24 +149,41 @@ public class Tester extends PApplet {
 			}
 			striker.move(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
 			striker.draw(this);
+			int totalScoreForTurn = 0;
 			for(int i = 0; i < pieces.size(); i++) {
 				GenericGamePiece p = pieces.get(i);
 				//p.draw(this);
 				int pScore = p.score(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH,4/3*GenericGamePiece_RADIUS);
 				if(pScore > 0) {
+					totalScoreForTurn+=pScore;
 					player.addCoin(p);
 					pieces.remove(p);
 					i--;		
 				}
 			}
+			if(totalScoreForTurn>0) {
+				chainTurn = true;
+			}	
 			int sScore = striker.score(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH,4/3*GenericGamePiece_RADIUS);
 			if(sScore==-1) {
+				GenericGamePiece pi = player.removeCoin();
+				if(pi!=null) {
+					pieces.add(pi);
+					pi.setLoc(pi.getInitialX(), pi.getInitialY());
+				}
 				for(GenericGamePiece p : pieces) {
 					p.setVelX(0);
 					p.setVelY(0);
 				}
 				striker.setVelX(0);
 				striker.setVelY(0);
+				
+				if(pi!=null) {
+					striker.collide(pi,this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
+					for(GenericGamePiece p : pieces) {
+						pi.collide(p,this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
+					}
+				}
 			}
 			ArrayList<GenericGamePiece> stationarypieces = new ArrayList<GenericGamePiece>();
 			for(int i = 0; i < pieces.size(); i++) {
@@ -199,19 +225,40 @@ public class Tester extends PApplet {
 			if(striker.isMoving()) {
 				stop = false;
 			}
-			if(stop) {
-				striker.setLoc(player.getHitarea().getX()+player.getHitarea().getWidth()/2, player.getHitarea().getY()+player.getHitarea().getHeight()/2);
+			if(stop) {	
 				turnPhase = 0;
-				playerTurn = (playerTurn+1) % players.size();
+				if(!chainTurn) {
+					playerTurn = (playerTurn+1) % players.size();
+				}
+				player = players.get(playerTurn);
+				striker.setLoc(player.getHitarea().getX()+player.getHitarea().getWidth()/2, player.getHitarea().getY()+player.getHitarea().getHeight()/2);
+				if(pieces.isEmpty()) {
+					turnPhase = 3;
+				}
 			}
+		}else if(turnPhase==3) {
+			if(players.get(0).getScore()>players.get(1).getScore()){
+				textAlign(CENTER,CENTER);
+				text("Player 1 Won!",width/2,height/2);
+			}else if(players.get(0).getScore()<players.get(1).getScore()){
+				textAlign(CENTER,CENTER);
+				text("Player 2 Won!",500,500);
+			}else {
+				textAlign(CENTER,CENTER);
+				text("Draw!",500,500);
+			}
+			//text("Player 1 score: " + players.get(0).getScore(),width/4,height*3/4);
+			//text("Player 2 score: " + players.get(1).getScore(),width*3/4,height*3/4);
 		}
 		
 		//testGenericGamePiece.move(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
 		//testGenericGamePiece.draw(this);
+		//System.out.println(playerTurn);
 		textSize(30);
 		fill(0);
 		textAlign(CENTER,CENTER);
-		text("Player 1 score: " + players.get(0).getScore() + "                      Player 2 score: " + players.get(1).getScore(),width/2,height/10);
+		text("Player 1 score: " + players.get(0).getScore(),width/4,height/10);
+		text("Player 2 score: " + players.get(1).getScore(),width*3/4,height/10);
 	}
 	
 	public void mouseDragged() {

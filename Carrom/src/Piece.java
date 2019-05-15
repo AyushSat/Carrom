@@ -10,8 +10,8 @@ import processing.core.PImage;
  *
  */
 public abstract class Piece {
-	protected final double initialX;
-	protected final double initialY;
+	protected double initialX;
+	protected double initialY;
 	protected double x;
 	protected double y;
 	protected double velX;
@@ -123,7 +123,16 @@ public abstract class Piece {
 	public double getInitialY() {
 		return initialY;
 	}
-	
+	public void setInitialX(double x) {
+		this.initialX = x;
+	}
+	public void setInitialY(double y) {
+		this.initialY = y;
+	}
+	public void setInitLoc(double x, double y) {
+		setInitialX(x);
+		setInitialY(y);
+	}
 	/** Sets location of the piece in given boundaries. If outside, it will move to the closest valid point (inside the boundaries).
 	 * 
 	 * @param x the new x location
