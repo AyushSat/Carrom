@@ -90,6 +90,7 @@ public class GameBoard extends PApplet {
 		black = loadImage("data" + File.separator + "black.png");
 		white = loadImage("data" + File.separator + "white.png");
 		red = loadImage("data" + File.separator + "red.png");
+		s = loadImage("data" + File.separator + "striker.png");
 	}
 
 	public void draw() {
@@ -99,7 +100,7 @@ public class GameBoard extends PApplet {
 		image(board, width/2, height/2, width * 0.75f, height * 0.75f);
 		
 		if(turnPhase==0) { //only striker is moving
-			striker.draw(this);
+			striker.draw(this, s);
 			for(GenericGamePiece p : pieces) {
 				if(p.getValue() == 10)
 					p.draw(this, black);
@@ -109,7 +110,7 @@ public class GameBoard extends PApplet {
 					p.draw(this, red);
 			}
 		}else if(turnPhase==1) {
-			striker.draw(this);
+			striker.draw(this, s);
 			for(GenericGamePiece p : pieces) {
 				if(p.getValue() == 10)
 					p.draw(this, black);
@@ -146,7 +147,7 @@ public class GameBoard extends PApplet {
 				striker.collide(p,this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
 			}
 			striker.move(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
-			striker.draw(this);
+			striker.draw(this, s);
 			for(int i = 0; i < pieces.size(); i++) {
 				GenericGamePiece p = pieces.get(i);
 				//p.draw(this, black);
