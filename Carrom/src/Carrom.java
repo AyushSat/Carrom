@@ -12,22 +12,21 @@ import processing.core.PApplet;
 public class Carrom {
 	public static void main(String[] args) {
 		
-		//initialize and run sketch
-		GameBoard board = new GameBoard(9, 9);
-		PApplet.runSketch(new String[]{"Carrom"}, board);
+		Menu menu = new Menu();
+		PApplet.runSketch(new String[]{"Menu"}, menu);
 		
-		PSurfaceAWT surf = (PSurfaceAWT) board.getSurface();
-		PSurfaceAWT.SmoothCanvas canvas = (PSurfaceAWT.SmoothCanvas) surf.getNative();
-		JFrame window = (JFrame)canvas.getFrame();
+		PSurfaceAWT menusurf = (PSurfaceAWT) menu.getSurface();
+		PSurfaceAWT.SmoothCanvas menucanvas = (PSurfaceAWT.SmoothCanvas) menusurf.getNative();
+		JFrame menuwindow = (JFrame)menucanvas.getFrame();
 		
 		//window is 1000x1000 permanently
-		window.setSize(1000,1000);
-		window.setMinimumSize(new Dimension(1000,1000));
-		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		window.setResizable(false);//a stretch is to change this
-		
+		menuwindow.setSize(1000,1000);
+		menuwindow.setMinimumSize(new Dimension(1000,1000));
+		menuwindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		menuwindow.setResizable(false);//a stretch is to change this
+				
 		//make window visible
-		window.setVisible(true);
-		canvas.requestFocus();
+		menuwindow.setVisible(true);
+		menucanvas.requestFocus();
 	}
 }
