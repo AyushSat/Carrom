@@ -271,7 +271,7 @@ public class Tester extends PApplet {
 				if(players.get(i).getHitarea().getCenterX()-width/2 <= width/10) {
 					p.setLoc(width/2 - GenericGamePiece_RADIUS * 4 * ((players.get(i).getPieces().size()+1)/2.0f - (j+1)), height/2 + 1.7f*(players.get(i).getHitarea().getCenterY()-height/2));
 				}else {
-					//TBD
+					p.setLoc(width/2 + 1.7f*(players.get(i).getHitarea().getCenterX()-width/2),height/2 - GenericGamePiece_RADIUS * 4 * ((players.get(i).getPieces().size()+1)/2.0f - (j+1)));
 				}
 				if(p.getValue() == 10)
 					p.draw(this, black);
