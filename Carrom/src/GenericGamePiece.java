@@ -16,7 +16,7 @@ public class GenericGamePiece extends Piece{
 	 * @param value the value of the GenericGamePiece (points)
 	 */
 	public GenericGamePiece(double x, double y, double radius, int value) {
-		super(x,y,radius, 0.98);
+		super(x,y,radius, 0.965);
 		this.value = value;
 		//super.setColor(255,0,0);
 	}

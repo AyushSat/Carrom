@@ -23,7 +23,7 @@ public abstract class Piece {
 	/**An epsilon representing the threshold for motion to be considered not motion.
 	 * 
 	 */
-	public static final double NEGLIGIBLE_VEL = .5;
+	public static final double NEGLIGIBLE_VEL = .8;
 	/**An epsilon used for double comparisons.
 	 * 
 	 */

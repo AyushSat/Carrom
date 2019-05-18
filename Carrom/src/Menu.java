@@ -1,10 +1,12 @@
 import java.awt.Color;
 import java.awt.Dimension;
+import java.io.File;
 
 import javax.swing.JFrame;
 
 import processing.awt.PSurfaceAWT;
 import processing.core.PApplet;
+import processing.core.PImage;
 
 /**
  * PApplet for testing purposes
@@ -17,6 +19,8 @@ public class Menu extends PApplet {
 	private Button start;
 	private double w;
 	private double h;
+	private PImage background;
+	private PImage title;
 
 	public Menu(double width, double height) {
 		start = new Button(width/2 - 50, height/2 - 10, 100, 20, Color.CYAN, Color.BLUE, "Start");
@@ -29,11 +33,14 @@ public class Menu extends PApplet {
 	}
 
 	public void setup() {
-		
+		background = loadImage("data" + File.separator + "backgroundMenu.jpg");
+		title = loadImage("data" + File.separator + "title.png");
 	}
 
 	public void draw() {
-		background(255);
+		image(background, 0, 0);
+		imageMode(CENTER);
+		image(title, width/2, 200);
 		
 		if(start.getBoundingRectangle().contains(mouseX, mouseY))
 			start.setHover(true);
