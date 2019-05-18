@@ -129,6 +129,11 @@ public abstract class Piece {
 	public void setInitialY(double y) {
 		this.initialY = y;
 	}
+	/**Sets the designated location of the piece in case it must be 'respawned'
+	 * 
+	 * @param x x coordinate 
+	 * @param y y coodrinate
+	 */
 	public void setInitLoc(double x, double y) {
 		setInitialX(x);
 		setInitialY(y);

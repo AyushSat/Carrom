@@ -78,6 +78,10 @@ public class Player {
 		return sum;
 	}
 	
+	public ArrayList<GenericGamePiece> getPieces(){
+		return myPieces;
+	}
+	
 	/**Draws the striker of the player.
 	 * 
 	 * @param p PApplet to draw in

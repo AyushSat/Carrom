@@ -263,8 +263,25 @@ public class Tester extends PApplet {
 		textSize(30);
 		fill(0);
 		textAlign(CENTER,CENTER);
-		text("Player 1 score: " + players.get(0).getScore(),width/4,height/10);
-		text("Player 2 score: " + players.get(1).getScore(),width*3/4,height/10);
+		//height/20
+		for(int i = 0; i < players.size();i++) {	
+			text("Player " + (i+1) + " score: " + players.get(i).getScore(),(i+1.0f)/(players.size()+1)*width,height/30);
+			for(int j = 0; j < players.get(i).getPieces().size();j++) {
+				GenericGamePiece p = players.get(i).getPieces().get(j);
+				if(players.get(i).getHitarea().getCenterX()-width/2 <= width/10) {
+					p.setLoc(width/2 - GenericGamePiece_RADIUS * 4 * ((players.get(i).getPieces().size()+1)/2.0f - (j+1)), height/2 + 1.7f*(players.get(i).getHitarea().getCenterY()-height/2));
+				}else {
+					//TBD
+				}
+				if(p.getValue() == 10)
+					p.draw(this, black);
+				else if(p.getValue() == 20)
+					p.draw(this, white);
+				else
+					p.draw(this, red);
+				
+			}
+		}
 	}
 	
 	public void mouseDragged() {
@@ -313,6 +330,9 @@ public class Tester extends PApplet {
 	}
 	
 	public static void main(String[] args) {
+		//System.out.println(1%5);
+		
+		
 		Tester board = new Tester(9, 9);
 		PApplet.runSketch(new String[]{"Carrom"}, board);
 		
