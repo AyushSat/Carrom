@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
@@ -12,13 +13,19 @@ import processing.core.PApplet;
  * @version 5/6/19
  */
 public class Menu extends PApplet {
+	
+	private Button start;
+	private double w;
+	private double h;
 
-	public Menu() {
-		
+	public Menu(double width, double height) {
+		start = new Button(width/2 - 50, height/2 - 10, 100, 20, Color.CYAN, Color.BLUE, "Start");
+		w = width;
+		h = height;
 	}
 
 	public void settings() {
-		size(1000, 1000);
+		size((int)w, (int)h);
 	}
 
 	public void setup() {
@@ -26,7 +33,14 @@ public class Menu extends PApplet {
 	}
 
 	public void draw() {
-	
+		background(255);
+		
+		if(start.getBoundingRectangle().contains(mouseX, mouseY))
+			start.setHover(true);
+		else
+			start.setHover(false);
+			
+		start.draw(this);
 	}
 	
 	public void mouseDragged() {
@@ -34,11 +48,15 @@ public class Menu extends PApplet {
 	} 
 	
 	public void mousePressed() {
-		
+		if(start.getBoundingRectangle().contains(mouseX, mouseY))
+			startGame();
 	}
 	
 	public void keyPressed() {
-		//initialize and run sketch
+	
+	}
+	
+	private void startGame() {
 		GameBoard board = new GameBoard(9, 9);
 		PApplet.runSketch(new String[]{"Carrom"}, board);
 		

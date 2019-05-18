@@ -35,7 +35,7 @@ Must-Haves:
 * Accurate hitboxes, collision, and bouncing. This will mirror elastic collisions in real life.
 * Win condition
 * Menu with instructions and credits page
-* First game version will be the one where each player can hit any piece to 
+* First game version will be the one where each player can hit any piece to score
 * Trajectory tracing like in 8-ball pool (the iMessage game). This will help the player aim.
 
 
@@ -102,10 +102,13 @@ Calix:
 Credit List:
 * Akshat
    * Wrote gameboard class, handled images and background, wrote main
+   * Made Menu
+   * Made UML
 * Ayush
-   * Made the UML 
+   * Networking integration, player system
 * Calix
    * Wrote the collision system
+   * Wrote pieces and turn system
 * https://www.real-world-physics-problems.com/physics-of-billiards.html
 * https://i.stack.imgur.com/CKI4U.png 
 * Our good friend Jing-Chen Peng
