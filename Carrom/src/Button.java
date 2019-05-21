@@ -4,7 +4,7 @@ import java.awt.geom.Rectangle2D;
 import processing.core.PApplet;
 import processing.core.PConstants;
 
-/**
+/**Represents a PApplet Button!
  * 
  * @author Akshat
  *
