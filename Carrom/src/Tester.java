@@ -140,7 +140,15 @@ public class Tester extends PApplet {
 				velX *= 3*width/100/Math.sqrt(Math.pow(velX, 2)+Math.pow(velY, 2));
 				velY *= 3*width/100/Math.sqrt(Math.pow(velX, 2)+Math.pow(velY, 2));
 			}
-				
+			if(Math.abs(player.getHitarea().getCenterX()-width/2) <= width/10) {
+				if(velY/(player.getHitarea().getCenterY()-(height/2))>0) {
+					velY = 0;
+				}
+			}else {
+				if(velX/(player.getHitarea().getCenterX()-(width/2))>0) {
+					velX = 0;
+				}
+			}
 			striker.setVelX(velX);
 			striker.setVelY(velY);
 			pushStyle();
@@ -191,6 +199,7 @@ public class Tester extends PApplet {
 					}
 				}
 			}
+			/*
 			ArrayList<GenericGamePiece> stationarypieces = new ArrayList<GenericGamePiece>();
 			for(int i = 0; i < pieces.size(); i++) {
 				if(!pieces.get(i).isMoving()) {
@@ -210,6 +219,12 @@ public class Tester extends PApplet {
 			for(int i = 0; i < stationarypieces.size();i++) {
 				pieces.add(stationarypieces.remove(i));
 				i--;
+			}
+			*/
+			for(int i = 0; i < pieces.size()-1; i++) {
+				for(int j = i+1; j < pieces.size(); j++) {
+					pieces.get(i).collide(pieces.get(j), this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
+				}
 			}
 			for(GenericGamePiece p : pieces) {
 				p.collide(striker, this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
@@ -253,22 +268,15 @@ public class Tester extends PApplet {
 				textAlign(CENTER,CENTER);
 				text("Draw!",500,500);
 			}
-			//text("Player 1 score: " + players.get(0).getScore(),width/4,height*3/4);
-			//text("Player 2 score: " + players.get(1).getScore(),width*3/4,height*3/4);
 		}
-		
-		//testGenericGamePiece.move(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
-		//testGenericGamePiece.draw(this);
-		//System.out.println(playerTurn);
 		textSize(30);
 		fill(0);
 		textAlign(CENTER,CENTER);
-		//height/20
 		for(int i = 0; i < players.size();i++) {	
 			text("Player " + (i+1) + " score: " + players.get(i).getScore(),(i+1.0f)/(players.size()+1)*width,height/30);
 			for(int j = 0; j < players.get(i).getPieces().size();j++) {
 				GenericGamePiece p = players.get(i).getPieces().get(j);
-				if(players.get(i).getHitarea().getCenterX()-width/2 <= width/10) {
+				if(Math.abs(players.get(i).getHitarea().getCenterX()-width/2) <= width/10) {
 					p.setLoc(width/2 - GenericGamePiece_RADIUS * 4 * ((players.get(i).getPieces().size()+1)/2.0f - (j+1)), height/2 + 1.7f*(players.get(i).getHitarea().getCenterY()-height/2));
 				}else {
 					p.setLoc(width/2 + 1.7f*(players.get(i).getHitarea().getCenterX()-width/2),height/2 - GenericGamePiece_RADIUS * 4 * ((players.get(i).getPieces().size()+1)/2.0f - (j+1)));

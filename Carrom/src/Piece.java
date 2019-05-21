@@ -64,7 +64,7 @@ public abstract class Piece {
 		this.y = y;
 		this.initialX = x;
 		this.initialY = y;
-		this.radius = radius;
+		this.radius = Math.abs(radius);
 		this.velX = 0;
 		this.velY = 0;
 		this.R = R;
@@ -289,8 +289,8 @@ public abstract class Piece {
 		if(this.isColliding(that) && (this.isMoving() || that.isMoving())) {
 			if(this.getMomentum()>=that.getMomentum()) {
 				this.unCollide(that);
-				double thisMass = Math.pow(this.radius,1);
-				double thatMass = Math.pow(that.radius,1);
+				double thisMass = this.radius;
+				double thatMass = that.radius;
 				
 				double dX = this.x - that.x;
 				double dY = this.y - that.y;
@@ -298,7 +298,7 @@ public abstract class Piece {
 			
 				double dvX = this.velX - that.velX;
 				double dvY = this.velY - that.velY;
-				//double dV = Math.pow(dvX, 2)+Math.pow(dvY, 2);
+				double dV = Math.pow(dvX, 2)+Math.pow(dvY, 2);
 				
 				
 				that.velX = (dX*dvX+dY*dvY)/dXYsq*dX*thisMass/thatMass;
@@ -309,6 +309,7 @@ public abstract class Piece {
 				that.move(minX, minY, maxX, maxY);
 				this.move(minX, minY, maxX, maxY);
 				this.unCollide(that);
+				
 			}else {
 				that.collide(this, minX, minY, maxX, maxY);
 			}
