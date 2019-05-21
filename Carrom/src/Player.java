@@ -81,7 +81,16 @@ public class Player {
 	public ArrayList<GenericGamePiece> getPieces(){
 		return myPieces;
 	}
-	
+	/**Returns the last piece sunk by the player. If the player has not sunk any pieces, returns null.
+	 * 
+	 * @return last piece or null.
+	 */
+	public GenericGamePiece getLastPiece() {
+		if(myPieces.size()==0) {
+			return null;
+		}
+		return myPieces.get(myPieces.size()-1);
+	}
 	/**Draws the striker of the player.
 	 * 
 	 * @param p PApplet to draw in

@@ -29,26 +29,49 @@ public class Tester extends PApplet {
 	private boolean chainTurn;
 	private int turnPhase;
 	private int playerTurn;
+	private int turnStreak;
 
+	/**The radius to be used by a normal piece if the with and height are 1000.
+	 * 
+	 */
 	public static final float GenericGamePiece_RADIUS = 14.5f;
+	/**The border width of the board if the with and height are 1000.
+	 * 
+	 */
 	public static final float BORDER_WIDTH = 28;
+	/**The movement increment for the striker if the with and height are 1000.
+	 * 
+	 */
 	public static final float MOVEMENT_INCREMENT = 10;
+	/**Point value of white pieces
+	 * 
+	 */
+	public static final int WHITE_VALUE = 20;
+	/**Point value of black pieces
+	 * 
+	 */
+	public static final int BLACK_VALUE = 10;
+	/**Point value of the queen piece.
+	 * 
+	 */
+	public static final int QUEEN_VALUE = 50;
 	
 	public Tester(int blacks, int whites) {
+		turnStreak = 0;
 		chainTurn = false;
 		playerTurn = 0;
 		turnPhase = 0;
 		pieces = new ArrayList<GenericGamePiece>();
-		GenericGamePiece queen = new GenericGamePiece(0, 0, GenericGamePiece_RADIUS, 50);
+		GenericGamePiece queen = new GenericGamePiece(0, 0, GenericGamePiece_RADIUS, QUEEN_VALUE);
 		queen.setColor(255, 0, 0);
 		pieces.add(queen);
 		for (int i = 0; i < blacks; i++) {
-			GenericGamePiece black = new GenericGamePiece(0, 0, GenericGamePiece_RADIUS, 10);
+			GenericGamePiece black = new GenericGamePiece(0, 0, GenericGamePiece_RADIUS, BLACK_VALUE);
 			black.setColor(0, 0, 0);
 			pieces.add(black);
 		}
 		for (int i = 0; i < whites; i++) {
-			GenericGamePiece white = new GenericGamePiece(0, 0, GenericGamePiece_RADIUS, 20);
+			GenericGamePiece white = new GenericGamePiece(0, 0, GenericGamePiece_RADIUS, WHITE_VALUE);
 			white.setColor(255, 220, 150);
 			pieces.add(white);
 		}
@@ -62,7 +85,7 @@ public class Tester extends PApplet {
 	}
 
 	public void setup() {
-		frameRate(240);
+		//frameRate(240);
 		double x = width / 2;
 		double y = height / 2;
 
@@ -177,7 +200,7 @@ public class Tester extends PApplet {
 			}
 			if(totalScoreForTurn>0) {
 				chainTurn = true;
-			}	
+			}
 			int sScore = striker.score(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH,4/3*GenericGamePiece_RADIUS);
 			if(sScore==-1) {
 				GenericGamePiece pi = player.removeCoin();
@@ -248,8 +271,22 @@ public class Tester extends PApplet {
 			}
 			if(stop) {	
 				turnPhase = 0;
+				if(player.getLastPiece()!=null && player.getLastPiece().getValue()==QUEEN_VALUE&&turnStreak>0) {//this means player has not sunk anything and the queen was sunk last turn.
+					GenericGamePiece pi = player.removeCoin(); //must be the queen :)
+					if(pi!=null) {
+						pieces.add(pi);
+						pi.setLoc(pi.getInitialX(), pi.getInitialY());
+						//striker.collide(pi,this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
+						for(GenericGamePiece p : pieces) {
+							pi.collide(p,this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
+						}
+					}
+				}
 				if(!chainTurn) {
 					playerTurn = (playerTurn+1) % players.size();
+					turnStreak = 0;
+				}else {
+					turnStreak++;
 				}
 				player = players.get(playerTurn);
 				striker.setLoc(player.getHitarea().getX()+player.getHitarea().getWidth()/2, player.getHitarea().getY()+player.getHitarea().getHeight()/2);
@@ -307,17 +344,37 @@ public class Tester extends PApplet {
 		if(turnPhase==0) {
 			Player player = players.get(playerTurn);
 			Rectangle2D.Double bounds = player.getHitarea();
-			if(keyCode==37) {
+			if(keyCode==37) { //left arrow
 				striker.setLoc(striker.getX()-MOVEMENT_INCREMENT, striker.getY(),bounds.getMinX(),bounds.getMinY(),bounds.getMaxX(),bounds.getMaxY());
+				for(GenericGamePiece p : pieces) {
+					if(striker.isColliding(p)) {
+						striker.setLoc(p.getX()-striker.getRadius()-p.getRadius(), striker.getY(),bounds.getMinX(),bounds.getMinY(),bounds.getMaxX(),bounds.getMaxY());			
+					}
+				}				
 			}
-			if(keyCode==39) {
+			if(keyCode==39) { //right arrow
 				striker.setLoc(striker.getX()+MOVEMENT_INCREMENT, striker.getY(),bounds.getMinX(),bounds.getMinY(),bounds.getMaxX(),bounds.getMaxY());
+				for(GenericGamePiece p : pieces) {
+					if(striker.isColliding(p)) {
+						striker.setLoc(p.getX()+striker.getRadius()+p.getRadius(), striker.getY(),bounds.getMinX(),bounds.getMinY(),bounds.getMaxX(),bounds.getMaxY());			
+					}
+				}
 			}
-			if(keyCode==38) {
+			if(keyCode==38) { //up arrow
 				striker.setLoc(striker.getX(), striker.getY()-MOVEMENT_INCREMENT,bounds.getMinX(),bounds.getMinY(),bounds.getMaxX(),bounds.getMaxY());
+				for(GenericGamePiece p : pieces) {
+					if(striker.isColliding(p)) {
+						striker.setLoc(p.getX(), striker.getY()-striker.getRadius()-p.getRadius(),bounds.getMinX(),bounds.getMinY(),bounds.getMaxX(),bounds.getMaxY());			
+					}
+				}	
 			}
-			if(keyCode==40) {
+			if(keyCode==40) { //down arrow
 				striker.setLoc(striker.getX(),striker.getY()+MOVEMENT_INCREMENT,bounds.getMinX(),bounds.getMinY(),bounds.getMaxX(),bounds.getMaxY());
+				for(GenericGamePiece p : pieces) {
+					if(striker.isColliding(p)) {
+						striker.setLoc(p.getX(), striker.getY()+striker.getRadius()+p.getRadius(),bounds.getMinX(),bounds.getMinY(),bounds.getMaxX(),bounds.getMaxY());			
+					}
+				}
 			}
 			if(keyCode==10) {
 				turnPhase = 1;

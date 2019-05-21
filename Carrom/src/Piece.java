@@ -298,7 +298,7 @@ public abstract class Piece {
 			
 				double dvX = this.velX - that.velX;
 				double dvY = this.velY - that.velY;
-				double dV = Math.pow(dvX, 2)+Math.pow(dvY, 2);
+				//double dV = Math.pow(dvX, 2)+Math.pow(dvY, 2);
 				
 				
 				that.velX = (dX*dvX+dY*dvY)/dXYsq*dX*thisMass/thatMass;
@@ -322,14 +322,16 @@ public abstract class Piece {
 		if(this==that) {
 			return;
 		}
-		double dX = that.x - this.x;
-		double dY = that.y - this.y;
-		double dXY = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2));
-		double realD = this.radius + that.radius;
-		double realDX = dX * realD / dXY;
-		double realDY = dY * realD / dXY;
-		this.x -= (1.01)*(realDX - dX);
-		this.y -= (1.01)*(realDY - dY);
+		if(this.isColliding(that)) {
+			double dX = that.x - this.x;
+			double dY = that.y - this.y;
+			double dXY = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2));
+			double realD = this.radius + that.radius;
+			double realDX = dX * realD / dXY;
+			double realDY = dY * realD / dXY;
+			this.x -= (1.01)*(realDX - dX);
+			this.y -= (1.01)*(realDY - dY);
+		}	
 	}
 	
 	/**Gives the score of a piece at where it is, given the bounds of the board and radius of corner holes.
