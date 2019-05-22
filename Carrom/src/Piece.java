@@ -27,7 +27,7 @@ public abstract class Piece {
 	/**An epsilon used for double comparisons.
 	 * 
 	 */
-	public static final double EPSILON = 1E-5;
+	public static final double EPSILON = 1E-3;
 	/**Instantiates a Piece.
 	 * 
 	 * @param x initial x pos
@@ -183,7 +183,7 @@ public abstract class Piece {
 	 */
 	public void moveX(double minX, double maxX) {
 		x+=velX;
-		if(Math.abs(velX)<NEGLIGIBLE_VEL) {
+		if(Math.sqrt(Math.pow(velX, 2)+Math.pow(velY, 2))<NEGLIGIBLE_VEL) {
 			velX = 0;
 		}else {
 			velX *= friction;
@@ -204,7 +204,7 @@ public abstract class Piece {
 	 */
 	public void moveY(double minY, double maxY) {
 		y+=velY;
-		if(Math.abs(velY)<NEGLIGIBLE_VEL) {
+		if(Math.sqrt(Math.pow(velX, 2)+Math.pow(velY, 2))<NEGLIGIBLE_VEL) {
 			velY = 0;
 		}else {
 			velY *= friction;
@@ -288,7 +288,7 @@ public abstract class Piece {
 		}
 		if(this.isColliding(that) && (this.isMoving() || that.isMoving())) {
 			if(this.getMomentum()>=that.getMomentum()) {
-				this.unCollide(that);
+				//this.unCollide(that);
 				double thisMass = this.radius;
 				double thatMass = that.radius;
 				
@@ -313,24 +313,54 @@ public abstract class Piece {
 			}else {
 				that.collide(this, minX, minY, maxX, maxY);
 			}
+		}else {
+			this.unCollide(that);
 		}
 	}
 	
-	//This is just to unclip two pieces
-	//Precondition: that != this and they are actually in collision, but are not right on top of each other.
-	private void unCollide(Piece that) {
+	/**Unclips two pieces in a given boundary
+	 * 
+	 * @param that the other piece to unclip this piece from
+	 */
+	public void unCollide(Piece that) {
 		if(this==that) {
 			return;
 		}
 		if(this.isColliding(that)) {
-			double dX = that.x - this.x;
-			double dY = that.y - this.y;
-			double dXY = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2));
-			double realD = this.radius + that.radius;
-			double realDX = dX * realD / dXY;
-			double realDY = dY * realD / dXY;
-			this.x -= (1.01)*(realDX - dX);
-			this.y -= (1.01)*(realDY - dY);
+			
+			if(Math.abs(this.x-that.x)<EPSILON && Math.abs(this.y-that.y)<EPSILON) {
+				if(this.isMoving() || that.isMoving()) {
+					while(this.isColliding(that)) {
+						this.x-=this.velX;
+						this.y-=this.velY;
+						that.x-=that.velX;
+						that.y-=that.velY;
+					}
+				}else {
+					this.x+=2*this.radius;
+					this.y+=2*this.radius;
+					this.unCollide(that);
+				}
+			}else {
+				
+				double dX = that.x - this.x;
+				double dY = that.y - this.y;
+				double dXY = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2));
+				double realD = this.radius + that.radius;
+				double realDX = dX * realD / dXY;
+				double realDY = dY * realD / dXY;
+				this.x -= (1.01)*(realDX - dX);
+				this.y -= (1.01)*(realDY - dY);
+				/*
+				double midX = (this.x+that.x)/2;
+				double midY = (this.y+that.y)/2;
+				double thisDist = Math.sqrt(Math.pow(this.x-midX, 2)+Math.pow(this.y-midY, 2));
+ 				double thatDist = Math.sqrt(Math.pow(that.x-midX, 2)+Math.pow(that.y-midY, 2));
+				this.setLoc(this.x+(this.radius/thisDist*(this.x-midX)), this.y+(this.radius/thisDist*(this.y-midY)));
+				this.setLoc(that.x+(that.radius/thisDist*(that.x-midX)), that.y+(that.radius/thisDist*(that.y-midY)));
+				*/
+			}
+
 		}	
 	}
 	

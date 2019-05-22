@@ -139,14 +139,17 @@ public class Tester extends PApplet {
 			//player.draw(this,s);
 			striker.draw(this,s);
 			for(GenericGamePiece p : pieces) {
-				if(p.getValue() == 10)
+				for (GenericGamePiece q : pieces) {
+					p.unCollide(q);
+				}
+				if (p.getValue() == 10)
 					p.draw(this, black);
-				else if(p.getValue() == 20)
+				else if (p.getValue() == 20)
 					p.draw(this, white);
 				else
 					p.draw(this, red);
 			}
-		}else if(turnPhase==1) {
+		} else if(turnPhase==1) {
 			//players.get(0).draw(this);
 			striker.draw(this,s);
 			for(GenericGamePiece p : pieces) {
@@ -244,9 +247,10 @@ public class Tester extends PApplet {
 				i--;
 			}
 			*/
-			for(int i = 0; i < pieces.size()-1; i++) {
-				for(int j = i+1; j < pieces.size(); j++) {
-					pieces.get(i).collide(pieces.get(j), this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
+			
+			for(GenericGamePiece p : pieces) {
+				for(GenericGamePiece q: pieces) {
+					p.collide(q, this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);		
 				}
 			}
 			for(GenericGamePiece p : pieces) {
@@ -387,6 +391,15 @@ public class Tester extends PApplet {
 			for(GenericGamePiece p : pieces) {
 				p.setVelX(0);
 				p.setVelY(0);
+			}
+			striker.setVelX(0);
+			striker.setVelY(0);
+		}
+		if(keyCode==82) {
+			for(GenericGamePiece p : pieces) {
+				p.setVelX(0);
+				p.setVelY(0);
+				p.setLoc(p.getInitialX(), p.getInitialY());
 			}
 			striker.setVelX(0);
 			striker.setVelY(0);
