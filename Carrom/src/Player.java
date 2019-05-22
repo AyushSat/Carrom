@@ -13,8 +13,12 @@ public class Player {
 	private Striker striker;
 	private Rectangle2D.Double hitarea;
 	private ArrayList<GenericGamePiece> myPieces;
-	
-	public Player(Striker striker, Double hitarea) {
+	/**Instantiates a player with a striker it will use and a hit area
+	 * 
+	 * @param striker The striker the player will use
+	 * @param hitarea A 2D Rectangle representing where the striker will be confined to.
+	 */
+	public Player(Striker striker, Rectangle2D.Double hitarea) {
 		super();
 		this.striker = striker;
 		this.hitarea = hitarea;
