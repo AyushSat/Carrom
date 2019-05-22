@@ -6,7 +6,7 @@ import processing.core.PApplet;
 
 /**Represents a player of Carrom
  * 
- * @author Akshat
+ * @author Ayush
  *
  */
 public class Player {
