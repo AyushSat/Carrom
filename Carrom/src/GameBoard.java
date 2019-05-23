@@ -20,6 +20,7 @@ public class GameBoard extends PApplet {
 
 	private ArrayList<GenericGamePiece> pieces;
 	private ArrayList<Player> players;
+	private int amtPlayers;
 	private Striker striker;
 	private PImage board;
 	private PImage black;
@@ -36,6 +37,7 @@ public class GameBoard extends PApplet {
 	
 	public GameBoard(int blacks, int whites) {
 		chainTurn = false;
+		amtPlayers = 0;
 		playerTurn = 0;
 		turnPhase = 0;
 		pieces = new ArrayList<GenericGamePiece>();
@@ -56,7 +58,28 @@ public class GameBoard extends PApplet {
 		
 		striker = new Striker(0, 0, GenericGamePiece_RADIUS*4/3,255,255,255);
 	}
-
+	public GameBoard(int blacks, int whites, int amtPlayers) {
+		chainTurn = false;
+		playerTurn = 0;
+		turnPhase = 0;
+		pieces = new ArrayList<GenericGamePiece>();
+		GenericGamePiece queen = new GenericGamePiece(0, 0, GenericGamePiece_RADIUS, 50);
+		queen.setColor(255, 0, 0);
+		pieces.add(queen);
+		for (int i = 0; i < blacks; i++) {
+			GenericGamePiece black = new GenericGamePiece(0, 0, GenericGamePiece_RADIUS, 10);
+			black.setColor(0, 0, 0);
+			pieces.add(black);
+		}
+		for (int i = 0; i < whites; i++) {
+			GenericGamePiece white = new GenericGamePiece(0, 0, GenericGamePiece_RADIUS, 20);
+			white.setColor(255, 220, 150);
+			pieces.add(white);
+		}
+		players = new ArrayList<Player>();
+		this.amtPlayers = amtPlayers;
+		striker = new Striker(0, 0, GenericGamePiece_RADIUS*4/3,255,255,255);
+	}
 	public void settings() {
 		size(1000, 1000);
 	}
@@ -90,10 +113,20 @@ public class GameBoard extends PApplet {
 		for(GenericGamePiece p : pieces) {
 			p.setInitLoc(x,y);
 		}
-		players.add(new Player(striker,new Rectangle2D.Double(3*this.width/10-striker.getRadius(),height*.245,11 *this.width/25,2*striker.getRadius())));
-		players.add(new Player(striker,new Rectangle2D.Double(3*this.width/10-striker.getRadius(),height*.717,11*this.width/25,2*striker.getRadius())));
-		//players.add(new Player(striker,new Rectangle2D.Double(.245*this.width,height/1000 * 245+2*striker.getRadius(),2*striker.getRadius(),11*this.height/25)));
-		//players.add(new Player(striker,new Rectangle2D.Double(.716*this.width,height/1000 * 245+2*striker.getRadius(),2*striker.getRadius(),11*this.height/25)));
+		if(amtPlayers<=2) {
+			players.add(new Player(striker,new Rectangle2D.Double(3*this.width/10-striker.getRadius(),height*.245,11 *this.width/25,2*striker.getRadius())));
+			players.add(new Player(striker,new Rectangle2D.Double(3*this.width/10-striker.getRadius(),height*.717,11*this.width/25,2*striker.getRadius())));
+		}else if(amtPlayers==3) {
+			players.add(new Player(striker,new Rectangle2D.Double(3*this.width/10-striker.getRadius(),height*.245,11 *this.width/25,2*striker.getRadius())));
+			players.add(new Player(striker,new Rectangle2D.Double(3*this.width/10-striker.getRadius(),height*.717,11*this.width/25,2*striker.getRadius())));
+			players.add(new Player(striker,new Rectangle2D.Double(.245*this.width,height/1000 * 245+2*striker.getRadius(),2*striker.getRadius(),11*this.height/25)));
+		}else if(amtPlayers>=4) {
+			players.add(new Player(striker,new Rectangle2D.Double(3*this.width/10-striker.getRadius(),height*.245,11 *this.width/25,2*striker.getRadius())));
+			players.add(new Player(striker,new Rectangle2D.Double(3*this.width/10-striker.getRadius(),height*.717,11*this.width/25,2*striker.getRadius())));
+			players.add(new Player(striker,new Rectangle2D.Double(.245*this.width,height/1000 * 245+2*striker.getRadius(),2*striker.getRadius(),11*this.height/25)));
+			players.add(new Player(striker,new Rectangle2D.Double(.716*this.width,height/1000 * 245+2*striker.getRadius(),2*striker.getRadius(),11*this.height/25)));
+		}
+		
 		striker.setLoc(players.get(0).getHitarea().getX()+players.get(0).getHitarea().getWidth()/2, players.get(0).getHitarea().getY()+players.get(0).getHitarea().getHeight()/2);
 		board = loadImage("data" + File.separator + "board.png");
 		black = loadImage("data" + File.separator + "black.png");
@@ -140,7 +173,15 @@ public class GameBoard extends PApplet {
 				velX *= 3*width/100/Math.sqrt(Math.pow(velX, 2)+Math.pow(velY, 2));
 				velY *= 3*width/100/Math.sqrt(Math.pow(velX, 2)+Math.pow(velY, 2));
 			}
-				
+			if(Math.abs(player.getHitarea().getCenterX()-width/2) <= width/10) {
+				if(velY/(player.getHitarea().getCenterY()-(height/2))>0) {
+					velY = 0;
+				}
+			}else {
+				if(velX/(player.getHitarea().getCenterX()-(width/2))>0) {
+					velX = 0;
+				}
+			}
 			striker.setVelX(velX);
 			striker.setVelY(velY);
 			pushStyle();
@@ -260,11 +301,27 @@ public class GameBoard extends PApplet {
 		//testGenericGamePiece.move(this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
 		//testGenericGamePiece.draw(this);
 		//System.out.println(playerTurn);
-		textSize(30);
+		textSize(width*.03f - 5*(players.size()-2));
 		fill(0);
 		textAlign(CENTER,CENTER);
-		text("Player 1 score: " + players.get(0).getScore(),width/4,height/10);
-		text("Player 2 score: " + players.get(1).getScore(),width*3/4,height/10);
+		for(int i = 0; i < players.size();i++) {	
+			text("Player " + (i+1) + " score: " + players.get(i).getScore(),(i+1.0f)/(players.size()+1)*width,height/30);
+			for(int j = 0; j < players.get(i).getPieces().size();j++) {
+				GenericGamePiece p = players.get(i).getPieces().get(j);
+				if(Math.abs(players.get(i).getHitarea().getCenterX()-width/2) <= width/10) {
+					p.setLoc(width/2 - GenericGamePiece_RADIUS * 4 * ((players.get(i).getPieces().size()+1)/2.0f - (j+1)), height/2 + 1.7f*(players.get(i).getHitarea().getCenterY()-height/2));
+				}else {
+					p.setLoc(width/2 + 1.7f*(players.get(i).getHitarea().getCenterX()-width/2),height/2 - GenericGamePiece_RADIUS * 4 * ((players.get(i).getPieces().size()+1)/2.0f - (j+1)));
+				}
+				if(p.getValue() == 10)
+					p.draw(this, black);
+				else if(p.getValue() == 20)
+					p.draw(this, white);
+				else
+					p.draw(this, red);
+				
+			}
+		}
 	}
 	
 	public void mouseDragged() {
@@ -283,17 +340,37 @@ public class GameBoard extends PApplet {
 		if(turnPhase==0) {
 			Player player = players.get(playerTurn);
 			Rectangle2D.Double bounds = player.getHitarea();
-			if(keyCode==37) {
+			if(keyCode==37) { //left arrow
 				striker.setLoc(striker.getX()-MOVEMENT_INCREMENT, striker.getY(),bounds.getMinX(),bounds.getMinY(),bounds.getMaxX(),bounds.getMaxY());
+				for(GenericGamePiece p : pieces) {
+					if(striker.isColliding(p)) {
+						striker.setLoc(p.getX()-striker.getRadius()-p.getRadius(), striker.getY(),bounds.getMinX(),bounds.getMinY(),bounds.getMaxX(),bounds.getMaxY());			
+					}
+				}				
 			}
-			if(keyCode==39) {
+			if(keyCode==39) { //right arrow
 				striker.setLoc(striker.getX()+MOVEMENT_INCREMENT, striker.getY(),bounds.getMinX(),bounds.getMinY(),bounds.getMaxX(),bounds.getMaxY());
+				for(GenericGamePiece p : pieces) {
+					if(striker.isColliding(p)) {
+						striker.setLoc(p.getX()+striker.getRadius()+p.getRadius(), striker.getY(),bounds.getMinX(),bounds.getMinY(),bounds.getMaxX(),bounds.getMaxY());			
+					}
+				}
 			}
-			if(keyCode==38) {
+			if(keyCode==38) { //up arrow
 				striker.setLoc(striker.getX(), striker.getY()-MOVEMENT_INCREMENT,bounds.getMinX(),bounds.getMinY(),bounds.getMaxX(),bounds.getMaxY());
+				for(GenericGamePiece p : pieces) {
+					if(striker.isColliding(p)) {
+						striker.setLoc(striker.getX(), p.getY()-striker.getRadius()-p.getRadius(),bounds.getMinX(),bounds.getMinY(),bounds.getMaxX(),bounds.getMaxY());			
+					}
+				}	
 			}
-			if(keyCode==40) {
+			if(keyCode==40) { //down arrow
 				striker.setLoc(striker.getX(),striker.getY()+MOVEMENT_INCREMENT,bounds.getMinX(),bounds.getMinY(),bounds.getMaxX(),bounds.getMaxY());
+				for(GenericGamePiece p : pieces) {
+					if(striker.isColliding(p)) {
+						striker.setLoc(striker.getX(), p.getY()+striker.getRadius()+p.getRadius(),bounds.getMinX(),bounds.getMinY(),bounds.getMaxX(),bounds.getMaxY());			
+					}
+				}
 			}
 			if(keyCode==10) {
 				turnPhase = 1;
@@ -312,7 +389,7 @@ public class GameBoard extends PApplet {
 		}
 		//text(keyCode,100,100);
 	}
-	
+	/*
 	public static void main(String[] args) {
 		Tester board = new Tester(9, 9);
 		PApplet.runSketch(new String[]{"Carrom"}, board);
@@ -331,4 +408,5 @@ public class GameBoard extends PApplet {
 		window.setVisible(true);
 		canvas.requestFocus();
 	}
+	*/
 }

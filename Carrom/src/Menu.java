@@ -17,104 +17,128 @@ import processing.core.PImage;
 public class Menu extends PApplet {
 	private Tutorial tutorial;
 	private Button start;
+	private Button credits;
 	private Button tut;
+	private Button twoPlayer;
+	private Button threePlayer;
+	private Button fourPlayer;
+	private boolean startPressed;
 	private double w;
 	private double h;
 	private PImage background;
-	private PImage title;
 
 	public Menu(double width, double height) {
+		startPressed = false;
 		tutorial = null;
-		start = new Button(500, 490, 200, 40, Color.CYAN, Color.BLUE, "Start", 50);
-		tut = new Button(500, 550, 200, 40, Color.CYAN, Color.BLUE, "Tutorial",
+		start = new Button(width*.5, height*.49, width*.2, height*.04, Color.CYAN, Color.BLUE, "Start", 50);
+		tut = new Button(width*.5, height*.55, width*.2, height*.04, Color.CYAN, Color.BLUE, "Tutorial",
 				50);
-		credits = new Button(500, 610, 200, 40, Color.CYAN, Color.BLUE, "Credits",
+		credits = new Button(width*.5, height*.61, width*.2, height*.04, Color.CYAN, Color.BLUE, "Credits",
+				50);
+		twoPlayer = new Button(width*.5, height*.49, width*.2, height*.04, Color.CYAN, Color.BLUE, "2 players", 50);
+		threePlayer = new Button(width*.5, height*.55, width*.2, height*.04, Color.CYAN, Color.BLUE, "3 players",
+				50);
+		fourPlayer = new Button(width*.5, height*.61, width*.2, height*.04, Color.CYAN, Color.BLUE, "4 players",
 				50);
 		w = width;
 		h = height;
 	}
 
 	public void settings() {
-		size((int)w, (int)h);
+		size((int) w, (int) h);
 	}
 
 	public void setup() {
-		background = loadImage("data" + File.separator + "backgroundMenu.jpg");
-		title = loadImage("data" + File.separator + "title.png");
+		background = loadImage("data" + File.separator + "backgroundMenu.png");
 	}
 
 	public void draw() {
-		image(background, 0, 0);
-		imageMode(CENTER);
-		image(title, width/2, 200);
-		
-		if(start.getBoundingRectangle().contains(mouseX, mouseY))
-			start.setHover(true);
-		else
-			start.setHover(false);
-		if(tut.getBoundingRectangle().contains(mouseX,mouseY))
-			tut.setHover(true);
-		else
-			tut.setHover(false);
-		start.draw(this);
-		tut.draw(this);
+		image(background, 0, 0, 1000, 980);
+		if(startPressed) {
+			twoPlayer.draw(this);
+			threePlayer.draw(this);
+			fourPlayer.draw(this);
+		}else {
+			start.draw(this);
+			tut.draw(this);
+			credits.draw(this);
+		}	
 	}
-	
+
 	public void mouseDragged() {
-		
-	} 
-	
+
+	}
+
 	public void mousePressed() {
-		if(start.getBoundingRectangle().contains(mouseX, mouseY))
-			startGame();
-		if(tut.getBoundingRectangle().contains(mouseX,mouseY))
-			tutorial();
-	}
-	
-	public void keyPressed() {
-	
-	}
-	
-	private void startGame() {
-		GameBoard board = new GameBoard(9, 9);
-		PApplet.runSketch(new String[]{"Carrom"}, board);
+		if(startPressed) {
+			if(twoPlayer.getBoundingRectangle().contains(mouseX,mouseY)) {
+				startGame(2);
+			}
+			if(threePlayer.getBoundingRectangle().contains(mouseX,mouseY)) {
+				startGame(3);
+			}
+			if(fourPlayer.getBoundingRectangle().contains(mouseX,mouseY)) {
+				startGame(4);
+			}
+		}else {
+			if (start.getBoundingRectangle().contains(mouseX, mouseY))
+				startPressed = true;
+			if (tut.getBoundingRectangle().contains(mouseX, mouseY))
+				tutorial();
+			if (credits.getBoundingRectangle().contains(mouseX, mouseY)) {
+				//tutorial();
+			}
+		}
 		
+	}
+
+	public void mouseMoved() {
+		start.setHover(start.getBoundingRectangle().contains(mouseX, mouseY));
+		tut.setHover(tut.getBoundingRectangle().contains(mouseX, mouseY));
+		credits.setHover(credits.getBoundingRectangle().contains(mouseX, mouseY));
+
+	}
+
+	public void keyPressed() {
+
+	}
+
+	private void startGame(int players) {
+		GameBoard board = new GameBoard(9, 9, players);
+		PApplet.runSketch(new String[] { "Carrom" }, board);
+
 		PSurfaceAWT surf = (PSurfaceAWT) board.getSurface();
 		PSurfaceAWT.SmoothCanvas canvas = (PSurfaceAWT.SmoothCanvas) surf.getNative();
-		JFrame window = (JFrame)canvas.getFrame();
-		
-		//window is 1000x1000 permanently
-		window.setSize(1000,1000);
-		window.setMinimumSize(new Dimension(1000,1000));
+		JFrame window = (JFrame) canvas.getFrame();
+
+		// window is 1000x1000 permanently
+		window.setSize(1000, 1000);
+		window.setMinimumSize(new Dimension(1000, 1000));
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		window.setResizable(false);//a stretch is to change this
-		
-		//make window visible
+		window.setResizable(false);// a stretch is to change this
+
+		// make window visible
 		window.setVisible(true);
 		canvas.requestFocus();
 	}
+
 	public void tutorial() {
-		tutorial = new Tutorial(width,height);
-		PApplet.runSketch(new String[]{"Tutorial"},tutorial);
-		
 		tutorial = new Tutorial(width, height);
 		PApplet.runSketch(new String[] { "Tutorial" }, tutorial);
 
 		PSurfaceAWT surf = (PSurfaceAWT) tutorial.getSurface();
 		PSurfaceAWT.SmoothCanvas canvas = (PSurfaceAWT.SmoothCanvas) surf.getNative();
-		JFrame window = (JFrame)canvas.getFrame();
-		
-		//window is 1000x1000 permanently
-		window.setSize(1000,1000);
-		window.setMinimumSize(new Dimension(1000,1000));
+		JFrame window = (JFrame) canvas.getFrame();
+
+		// window is 1000x1000 permanently
+		window.setSize(1000, 1000);
+		window.setMinimumSize(new Dimension(1000, 1000));
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		window.setResizable(false);//a stretch is to change this
-		
-		//make window visible
+		window.setResizable(false);// a stretch is to change this
+
+		// make window visible
 		window.setVisible(true);
 		canvas.requestFocus();
-		
 	}
-	
-	
+
 }

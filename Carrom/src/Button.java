@@ -19,6 +19,7 @@ public class Button {
 	private Color defaultColor;
 	private Color hoverColor;
 	private boolean hovered;
+	private boolean pressed;
 	private String text;
 	
 	/**
@@ -40,6 +41,7 @@ public class Button {
 		hovered = false;
 		text = t;
 		round = r;
+		pressed = false;
 	}
 	
 	/**
@@ -64,6 +66,12 @@ public class Button {
 		hovered = h;
 	}
 	
+	public void setPressed(boolean p) {
+		pressed = p;
+	}
+	public boolean getPressed() {
+		return pressed;
+	}
 	/**
 	 * 
 	 * @return a Rectangle2D.Double object that bounds this Button
@@ -71,6 +79,7 @@ public class Button {
 	public Rectangle2D.Double getBoundingRectangle(){
 		return new Rectangle2D.Double(x - width/2, y - height/2, width, height);
 	}
+	
 	
 	
 }
