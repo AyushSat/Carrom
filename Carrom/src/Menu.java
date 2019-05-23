@@ -15,15 +15,18 @@ import processing.core.PImage;
  * @version 5/6/19
  */
 public class Menu extends PApplet {
-	
+	private Tutorial tutorial;
 	private Button start;
+	private Button tut;
 	private double w;
 	private double h;
 	private PImage background;
 	private PImage title;
 
 	public Menu(double width, double height) {
-		start = new Button(width/2 - 50, height/2 - 10, 100, 20, Color.CYAN, Color.BLUE, "Start");
+		tutorial = null;
+		start = new Button(width/5, height/2 - 10, width/10, height/50, Color.CYAN, Color.BLUE, "Start");
+		tut = new Button(width*7/10, height/2 - 10, width/10, height/50, Color.CYAN, Color.BLUE, "Tutorial");
 		w = width;
 		h = height;
 	}
@@ -46,8 +49,12 @@ public class Menu extends PApplet {
 			start.setHover(true);
 		else
 			start.setHover(false);
-			
+		if(tut.getBoundingRectangle().contains(mouseX,mouseY))
+			tut.setHover(true);
+		else
+			tut.setHover(false);
 		start.draw(this);
+		tut.draw(this);
 	}
 	
 	public void mouseDragged() {
@@ -57,6 +64,8 @@ public class Menu extends PApplet {
 	public void mousePressed() {
 		if(start.getBoundingRectangle().contains(mouseX, mouseY))
 			startGame();
+		if(tut.getBoundingRectangle().contains(mouseX,mouseY))
+			tutorial();
 	}
 	
 	public void keyPressed() {
@@ -81,4 +90,24 @@ public class Menu extends PApplet {
 		window.setVisible(true);
 		canvas.requestFocus();
 	}
+	public void tutorial() {
+		tutorial = new Tutorial(width,height);
+		PApplet.runSketch(new String[]{"Tutorial"},tutorial);
+		
+		PSurfaceAWT surf = (PSurfaceAWT) tutorial.getSurface();
+		PSurfaceAWT.SmoothCanvas canvas = (PSurfaceAWT.SmoothCanvas) surf.getNative();
+		JFrame window = (JFrame)canvas.getFrame();
+		
+		//window is 1000x1000 permanently
+		window.setSize(1000,1000);
+		window.setMinimumSize(new Dimension(1000,1000));
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		window.setResizable(false);//a stretch is to change this
+		
+		//make window visible
+		window.setVisible(true);
+		canvas.requestFocus();
+	}
+	
+	
 }

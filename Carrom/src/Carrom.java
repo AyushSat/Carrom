@@ -11,7 +11,6 @@ import processing.core.PApplet;
  */
 public class Carrom {
 	public static void main(String[] args) {
-		
 		Menu menu = new Menu(1000, 1000);
 		PApplet.runSketch(new String[]{"Menu"}, menu);
 		

@@ -225,33 +225,18 @@ public class Tester extends PApplet {
 					}
 				}
 			}
-			/*
-			ArrayList<GenericGamePiece> stationarypieces = new ArrayList<GenericGamePiece>();
-			for(int i = 0; i < pieces.size(); i++) {
-				if(!pieces.get(i).isMoving()) {
-					stationarypieces.add(pieces.remove(i));
-					i--;
-				}
-			}
-			//collision check
-			for(int i = 0; i < pieces.size();i++) {
-				for(int j = i+1; j < pieces.size(); j++) {
-					pieces.get(i).collide(pieces.get(j), this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
-				}
-				for(int k = 0; k < stationarypieces.size();k++) {
-					pieces.get(i).collide(stationarypieces.get(k), this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
-				}
-			}
-			for(int i = 0; i < stationarypieces.size();i++) {
-				pieces.add(stationarypieces.remove(i));
-				i--;
-			}
-			*/
+			
 			
 			for(GenericGamePiece p : pieces) {
 				for(GenericGamePiece q: pieces) {
 					p.collide(q, this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);		
 				}
+				if(p.getValue() == 10)
+					p.draw(this, black);
+				else if(p.getValue() == 20)
+					p.draw(this, white);
+				else
+					p.draw(this, red);
 			}
 			for(GenericGamePiece p : pieces) {
 				p.collide(striker, this.width/8+BORDER_WIDTH,this.height/8+BORDER_WIDTH,7*this.width/8-BORDER_WIDTH,7*this.height/8-BORDER_WIDTH);
@@ -368,7 +353,7 @@ public class Tester extends PApplet {
 				striker.setLoc(striker.getX(), striker.getY()-MOVEMENT_INCREMENT,bounds.getMinX(),bounds.getMinY(),bounds.getMaxX(),bounds.getMaxY());
 				for(GenericGamePiece p : pieces) {
 					if(striker.isColliding(p)) {
-						striker.setLoc(p.getX(), striker.getY()-striker.getRadius()-p.getRadius(),bounds.getMinX(),bounds.getMinY(),bounds.getMaxX(),bounds.getMaxY());			
+						striker.setLoc(striker.getX(), p.getY()-striker.getRadius()-p.getRadius(),bounds.getMinX(),bounds.getMinY(),bounds.getMaxX(),bounds.getMaxY());			
 					}
 				}	
 			}
@@ -376,7 +361,7 @@ public class Tester extends PApplet {
 				striker.setLoc(striker.getX(),striker.getY()+MOVEMENT_INCREMENT,bounds.getMinX(),bounds.getMinY(),bounds.getMaxX(),bounds.getMaxY());
 				for(GenericGamePiece p : pieces) {
 					if(striker.isColliding(p)) {
-						striker.setLoc(p.getX(), striker.getY()+striker.getRadius()+p.getRadius(),bounds.getMinX(),bounds.getMinY(),bounds.getMaxX(),bounds.getMaxY());			
+						striker.setLoc(striker.getX(), p.getY()+striker.getRadius()+p.getRadius(),bounds.getMinX(),bounds.getMinY(),bounds.getMaxX(),bounds.getMaxY());			
 					}
 				}
 			}
