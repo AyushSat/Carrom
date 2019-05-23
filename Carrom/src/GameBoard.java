@@ -85,7 +85,7 @@ public class GameBoard extends PApplet {
 	}
 
 	public void setup() {
-		frameRate(240);
+		frameRate(480);
 		double x = width / 2;
 		double y = height / 2;
 
@@ -387,6 +387,7 @@ public class GameBoard extends PApplet {
 			striker.setVelX(0);
 			striker.setVelY(0);
 		}
+		
 		//text(keyCode,100,100);
 	}
 	/*
@@ -409,4 +410,7 @@ public class GameBoard extends PApplet {
 		canvas.requestFocus();
 	}
 	*/
+	public void exit() {
+		this.dispose();
+	}
 }

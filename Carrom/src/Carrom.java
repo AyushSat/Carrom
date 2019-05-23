@@ -21,7 +21,7 @@ public class Carrom {
 		//window is 1000x1000 permanently
 		menuwindow.setSize(1000,1000);
 		menuwindow.setMinimumSize(new Dimension(1000,1000));
-		menuwindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		menuwindow.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		menuwindow.setResizable(false);//a stretch is to change this
 				
 		//make window visible

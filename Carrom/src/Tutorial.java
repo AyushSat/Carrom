@@ -44,6 +44,7 @@ public class Tutorial extends PApplet{
 		size((int)width,(int)height);
 	}
 	public void setup() {
+		frameRate(480);
 		background = loadImage("data" + File.separator + "board.png");
 		imageMode(CENTER);
 		black = loadImage("data" + File.separator + "black.png");
@@ -212,5 +213,8 @@ public class Tutorial extends PApplet{
 			progress = 2;
 		}
 		
+	}
+	public void exit() {
+		dispose();
 	}
 }

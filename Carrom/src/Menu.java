@@ -11,7 +11,7 @@ import processing.core.PImage;
 /**
  * PApplet for testing purposes
  * 
- * @author Akshat
+ * @author Akshat but later Calix
  * @version 5/6/19
  */
 public class Menu extends PApplet {
@@ -22,6 +22,7 @@ public class Menu extends PApplet {
 	private Button twoPlayer;
 	private Button threePlayer;
 	private Button fourPlayer;
+	private Button back;
 	private boolean startPressed;
 	private double w;
 	private double h;
@@ -40,6 +41,7 @@ public class Menu extends PApplet {
 				50);
 		fourPlayer = new Button(width*.5, height*.61, width*.2, height*.04, Color.CYAN, Color.BLUE, "4 players",
 				50);
+		back = new Button(width*.5,height*.67,width*.2,height*.04, Color.CYAN, Color.BLUE, "Back", 50);
 		w = width;
 		h = height;
 	}
@@ -58,6 +60,7 @@ public class Menu extends PApplet {
 			twoPlayer.draw(this);
 			threePlayer.draw(this);
 			fourPlayer.draw(this);
+			back.draw(this);
 		}else {
 			start.draw(this);
 			tut.draw(this);
@@ -80,6 +83,9 @@ public class Menu extends PApplet {
 			if(fourPlayer.getBoundingRectangle().contains(mouseX,mouseY)) {
 				startGame(4);
 			}
+			if(back.getBoundingRectangle().contains(mouseX,mouseY)) {
+				startPressed = false;
+			}
 		}else {
 			if (start.getBoundingRectangle().contains(mouseX, mouseY))
 				startPressed = true;
@@ -88,6 +94,7 @@ public class Menu extends PApplet {
 			if (credits.getBoundingRectangle().contains(mouseX, mouseY)) {
 				//tutorial();
 			}
+			
 		}
 		
 	}
@@ -96,7 +103,10 @@ public class Menu extends PApplet {
 		start.setHover(start.getBoundingRectangle().contains(mouseX, mouseY));
 		tut.setHover(tut.getBoundingRectangle().contains(mouseX, mouseY));
 		credits.setHover(credits.getBoundingRectangle().contains(mouseX, mouseY));
-
+		twoPlayer.setHover(twoPlayer.getBoundingRectangle().contains(mouseX,mouseY));
+		threePlayer.setHover(threePlayer.getBoundingRectangle().contains(mouseX,mouseY));
+		fourPlayer.setHover(fourPlayer.getBoundingRectangle().contains(mouseX,mouseY));
+		back.setHover(back.getBoundingRectangle().contains(mouseX,mouseY));
 	}
 
 	public void keyPressed() {
@@ -114,7 +124,7 @@ public class Menu extends PApplet {
 		// window is 1000x1000 permanently
 		window.setSize(1000, 1000);
 		window.setMinimumSize(new Dimension(1000, 1000));
-		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		window.setResizable(false);// a stretch is to change this
 
 		// make window visible
@@ -133,7 +143,7 @@ public class Menu extends PApplet {
 		// window is 1000x1000 permanently
 		window.setSize(1000, 1000);
 		window.setMinimumSize(new Dimension(1000, 1000));
-		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		window.setResizable(false);// a stretch is to change this
 
 		// make window visible
