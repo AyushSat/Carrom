@@ -29,8 +29,14 @@ public class Menu extends PApplet {
 	private double w;
 	private double h;
 	private PImage background;
+	private Music music;
+	private Thread t;
+	private static File song = new File("classic.wav");
 
 	public Menu(double width, double height) {
+		music = new Music(song);
+		t = new Thread(music);
+		t.start();
 		level = 0;
 		tutorial = null;
 		start = new Button(width*.5, height*.49, width*.2, height*.04, Color.CYAN, Color.BLUE, "Start", 50);
