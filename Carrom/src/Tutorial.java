@@ -56,6 +56,9 @@ public class Tutorial extends PApplet{
 		pieces.get(0).setLoc(width/4,height/2);
 		pieces.get(1).setLoc(width/2,height/2);
 		pieces.get(2).setLoc(3*width/4,height/2);
+		pieces.get(0).setInitLoc(width/4,height/2);
+		pieces.get(1).setInitLoc(width/2,height/2);
+		pieces.get(2).setInitLoc(3*width/4,height/2);
 		striker.setLoc(width/2, height/5);
 	}
 	public void draw() {
@@ -111,7 +114,25 @@ public class Tutorial extends PApplet{
 				else
 					p.draw(this, queen);
 			}
-			
+			for (int i = 0; i < pieces.size(); i++) {
+				GenericGamePiece p = pieces.get(i);
+				// p.draw(this);
+				int pScore = p.score(this.width / 8 + Tester.BORDER_WIDTH, this.height / 8 + Tester.BORDER_WIDTH,
+						7 * this.width / 8 - Tester.BORDER_WIDTH, 7 * this.height / 8 - Tester.BORDER_WIDTH,
+						4 / 3 * Tester.GenericGamePiece_RADIUS);
+				if (pScore > 0) {
+					p.setLoc(p.getInitialX(), p.getInitialY());
+					p.setVelX(0);
+					p.setVelY(0);
+				}
+			}
+			if(striker.score(this.width / 8 + Tester.BORDER_WIDTH, this.height / 8 + Tester.BORDER_WIDTH,
+						7 * this.width / 8 - Tester.BORDER_WIDTH, 7 * this.height / 8 - Tester.BORDER_WIDTH,
+						4 / 3 * Tester.GenericGamePiece_RADIUS)<0) {
+				striker.setLoc(width/2, height/5);
+				striker.setVelX(0);
+				striker.setVelY(0);
+			}
 			boolean stop = true;
 			for(GenericGamePiece p : pieces) {
 				if(p.isMoving()) {
