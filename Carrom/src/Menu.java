@@ -23,13 +23,15 @@ public class Menu extends PApplet {
 	private Button threePlayer;
 	private Button fourPlayer;
 	private Button back;
-	private boolean startPressed;
+	private Button oneComputer;
+	private Button networked;
+	private int level;
 	private double w;
 	private double h;
 	private PImage background;
 
 	public Menu(double width, double height) {
-		startPressed = false;
+		level = 0;
 		tutorial = null;
 		start = new Button(width*.5, height*.49, width*.2, height*.04, Color.CYAN, Color.BLUE, "Start", 50);
 		tut = new Button(width*.5, height*.55, width*.2, height*.04, Color.CYAN, Color.BLUE, "Tutorial",
@@ -42,6 +44,9 @@ public class Menu extends PApplet {
 		fourPlayer = new Button(width*.5, height*.61, width*.2, height*.04, Color.CYAN, Color.BLUE, "4 players",
 				50);
 		back = new Button(width*.5,height*.67,width*.2,height*.04, Color.CYAN, Color.BLUE, "Back", 50);
+		oneComputer = new Button(width*.5, height*.49, width*.2, height*.04, Color.CYAN, Color.BLUE, "1 Computer", 50);
+		networked = new Button(width*.5, height*.55, width*.2, height*.04, Color.CYAN, Color.BLUE, "Networked",
+				50);
 		w = width;
 		h = height;
 	}
@@ -56,16 +61,20 @@ public class Menu extends PApplet {
 
 	public void draw() {
 		image(background, 0, 0, 1000, 980);
-		if(startPressed) {
+		if(level==2) {
 			twoPlayer.draw(this);
 			threePlayer.draw(this);
 			fourPlayer.draw(this);
 			back.draw(this);
-		}else {
+		}else if(level==0){
 			start.draw(this);
 			tut.draw(this);
 			credits.draw(this);
-		}	
+		}else if(level==1) {
+			networked.draw(this);
+			oneComputer.draw(this);
+			back.draw(this);
+		}
 	}
 
 	public void mouseDragged() {
@@ -73,7 +82,7 @@ public class Menu extends PApplet {
 	}
 
 	public void mousePressed() {
-		if(startPressed) {
+		if(level==2) {
 			if(twoPlayer.getBoundingRectangle().contains(mouseX,mouseY)) {
 				startGame(2);
 			}
@@ -84,17 +93,26 @@ public class Menu extends PApplet {
 				startGame(4);
 			}
 			if(back.getBoundingRectangle().contains(mouseX,mouseY)) {
-				startPressed = false;
+				level--;
 			}
-		}else {
+		}else if(level==0){
 			if (start.getBoundingRectangle().contains(mouseX, mouseY))
-				startPressed = true;
+				level++;
 			if (tut.getBoundingRectangle().contains(mouseX, mouseY))
 				tutorial();
 			if (credits.getBoundingRectangle().contains(mouseX, mouseY)) {
 				//tutorial();
 			}
-			
+		}else if(level==1) {
+			if(back.getBoundingRectangle().contains(mouseX,mouseY)) {
+				level--;
+			}
+			if(oneComputer.getBoundingRectangle().contains(mouseX,mouseY)) {
+				level++;
+			}
+			if(networked.getBoundingRectangle().contains(mouseX,mouseY)) {
+				level++;
+			}
 		}
 		
 	}
@@ -107,6 +125,8 @@ public class Menu extends PApplet {
 		threePlayer.setHover(threePlayer.getBoundingRectangle().contains(mouseX,mouseY));
 		fourPlayer.setHover(fourPlayer.getBoundingRectangle().contains(mouseX,mouseY));
 		back.setHover(back.getBoundingRectangle().contains(mouseX,mouseY));
+		oneComputer.setHover(oneComputer.getBoundingRectangle().contains(mouseX,mouseY));
+		networked.setHover(networked.getBoundingRectangle().contains(mouseX,mouseY));
 	}
 
 	public void keyPressed() {

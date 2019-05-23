@@ -28,30 +28,30 @@ Instructions:
 
 Features list: 
 Must-Haves: 
-* Scoring mechanics, 10 pt for white, 20 pt for black, 50 pt for red
-* Images for game pieces and boards.
-* Striker (analogous to cue ball) system and penalty for sinking the striker.
-* Friction to slow down game pieces. This will aid the collision system and make gameplay realistic.
-* Accurate hitboxes, collision, and bouncing. This will mirror elastic collisions in real life.
-* Win condition
-* Menu with instructions and credits page
-* First game version will be the one where each player can hit any piece to score
-* Trajectory tracing like in 8-ball pool (the iMessage game). This will help the player aim.
+* Scoring mechanics, 10 pt for white, 20 pt for black, 50 pt for red (done)
+* Images for game pieces and boards. (done)
+* Striker (analogous to cue ball) system and penalty for sinking the striker. (done)
+* Friction to slow down game pieces. This will aid the collision system and make gameplay realistic. (done)
+* Accurate hitboxes, collision, and bouncing. This will mirror elastic collisions in real life. (done)
+* Win condition (done)
+* Menu with instructions and credits page (done except for credits)
+* First game version will be the one where each player can hit any piece to score (done)
+* Trajectory tracing like in 8-ball pool (the iMessage game). This will help the player aim. (done)
 
 
 Want-to-Haves: 
 * Second game version will be a team version, where each team has an assigned color of piece that they must sink. Each piece color will be worth the same. If this version is implemented, we will add it to the instructions/description section of this readme.
-* Smooth graphics
-* Replayability - play again screen and reset in code
+* Smooth graphics (done)
+* Replayability - play again screen and reset in code (done)
 * Multiple versions of Carrom implemented (which have different rule sets)
 * Networked game - where people can play together on multiple computers
-* Variable flick strength, as in the player can determine how hard they “flick” the piece and how fast the resulting pieces move.
+* Variable flick strength, as in the player can determine how hard they “flick” the piece and how fast the resulting pieces move. (done)
 * A taunt/emote menu (networked) similar to that of Clash Royale
-* You see the board from the perspective of the person playing rather than your own perspective.
+* You see the board from the perspective of the person playing rather than your own perspective. (technically done)
 
 
 Reaches: 
-* A tutorial that teaches users how to play using our controls
+* A tutorial that teaches users how to play using our controls (done)
 * Implement 3D collision because in real life pieces move in x,y, and z directions. This will look like overlapping pieces.
 * An AI that flicks intelligently, allowing a single-player version to be implemented
 * In real Carrom, the striker must be placed in between two lines. There is a penalty for failure to place it in that range. However, as we will code Carrom, we will force the striker to move on a slider in the range. A stretch would be to allow the user to move it freely and then penalize them for moving the striker out of range. 
@@ -109,6 +109,7 @@ Credit List:
 * Calix
    * Wrote the collision system
    * Wrote pieces and turn system
+   * Wrote the majority of the code
 * https://www.real-world-physics-problems.com/physics-of-billiards.html
 * https://i.stack.imgur.com/CKI4U.png 
 * Our good friend Jing-Chen Peng
