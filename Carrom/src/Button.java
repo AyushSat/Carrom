@@ -15,6 +15,7 @@ public class Button {
 	private double y;
 	private double width;
 	private double height;
+	private int round;
 	private Color defaultColor;
 	private Color hoverColor;
 	private boolean hovered;
@@ -27,8 +28,9 @@ public class Button {
 	 * @param dC Color of button when button it is not being hovered over
 	 * @param hC Color of button when button it is being hovered over
 	 * @param t the text to be displayed on this Button
+	 * @param r the roundness of the button
 	 */
-	public Button(double xVal, double yVal, double w, double h, Color dC, Color hC, String t) {
+	public Button(double xVal, double yVal, double w, double h, Color dC, Color hC, String t, int r) {
 		x = xVal;
 		y = yVal;
 		width = w;
@@ -37,6 +39,7 @@ public class Button {
 		hoverColor = hC;
 		hovered = false;
 		text = t;
+		round = r;
 	}
 	
 	/**
@@ -49,9 +52,11 @@ public class Button {
 			marker.fill(defaultColor.getRed(), defaultColor.getGreen(), defaultColor.getBlue());
 		else
 			marker.fill(hoverColor.getRed(), hoverColor.getGreen(), hoverColor.getBlue());
-		marker.rect((float)x, (float)y, (float)width, (float)height);
+		marker.rectMode(PConstants.CENTER);
+		marker.rect((float)x, (float)y, (float)width, (float)height, round);
 		marker.fill(255);
-		marker.text(text, (float)(x + width/2 - marker.textWidth(text)/2), (float)(y + height/2) + marker.textAscent()/2);
+		marker.textSize((float)height - 10);
+		marker.text(text, (float)(x - marker.textWidth(text)/2), (float)(y) + marker.textAscent()/2 - 5);
 		marker.popStyle();
 	}
 	
@@ -64,7 +69,7 @@ public class Button {
 	 * @return a Rectangle2D.Double object that bounds this Button
 	 */
 	public Rectangle2D.Double getBoundingRectangle(){
-		return new Rectangle2D.Double(x, y, width, height);
+		return new Rectangle2D.Double(x - width/2, y - height/2, width, height);
 	}
 	
 	
