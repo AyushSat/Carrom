@@ -25,8 +25,8 @@ public class Menu extends PApplet {
 
 	public Menu(double width, double height) {
 		tutorial = null;
-		start = new Button(width/5, height/2 - 10, width/10, height/50, Color.CYAN, Color.BLUE, "Start");
-		tut = new Button(width*7/10, height/2 - 10, width/10, height/50, Color.CYAN, Color.BLUE, "Tutorial");
+		start = new Button(width*3/20, height/2 - 10, width/5, height/20, Color.CYAN, Color.BLUE, "Start");
+		tut = new Button(width*13/20, height/2 - 10, width/5, height/20, Color.CYAN, Color.BLUE, "Tutorial");
 		w = width;
 		h = height;
 	}
@@ -93,7 +93,7 @@ public class Menu extends PApplet {
 	public void tutorial() {
 		tutorial = new Tutorial(width,height);
 		PApplet.runSketch(new String[]{"Tutorial"},tutorial);
-		
+		/*
 		PSurfaceAWT surf = (PSurfaceAWT) tutorial.getSurface();
 		PSurfaceAWT.SmoothCanvas canvas = (PSurfaceAWT.SmoothCanvas) surf.getNative();
 		JFrame window = (JFrame)canvas.getFrame();
@@ -107,6 +107,7 @@ public class Menu extends PApplet {
 		//make window visible
 		window.setVisible(true);
 		canvas.requestFocus();
+		*/
 	}
 	
 	
