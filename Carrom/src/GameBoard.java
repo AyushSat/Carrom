@@ -171,6 +171,12 @@ public class GameBoard extends PApplet {
 		if (turnPhase != 3) {
 			imageMode(CENTER);
 			image(board, width / 2, height / 2, width * 0.75f, height * 0.75f);
+			textSize(width*.02f);
+			fill(0,0,255);
+			for(int i = 0; i < players.size();i++) {
+				text("Player " + (i+1), width/2 + 1.8f*((float)players.get(i).getHitarea().getCenterX()-width/2),height/2 + 1.8f*((float)players.get(i).getHitarea().getCenterY()-height/2) );
+			}
+			fill(0);
 		}
 
 		if (turnPhase == 0) {
