@@ -110,12 +110,15 @@ public class Menu extends PApplet {
 		if(level==2) {
 			if(twoPlayer.getBoundingRectangle().contains(mouseX,mouseY)) {
 				startGame(2);
+				level = 0;
 			}
 			if(threePlayer.getBoundingRectangle().contains(mouseX,mouseY)) {
 				startGame(3);
+				level = 0;
 			}
 			if(fourPlayer.getBoundingRectangle().contains(mouseX,mouseY)) {
 				startGame(4);
+				level = 0;
 			}
 			if(back.getBoundingRectangle().contains(mouseX,mouseY)) {
 				level--;
