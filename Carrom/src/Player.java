@@ -37,6 +37,10 @@ public class Player {
 		this.hitarea = hitarea;
 	}
 	
+	/**Add a coin into the player's sunk pieces
+	 * 
+	 * @param piece the piece to add
+	 */
 	public void addCoin(GenericGamePiece piece) {
 		myPieces.add(piece);
 	}
@@ -72,7 +76,7 @@ public class Player {
 	}
 	/**Returns the player's score according to coins pocketed
 	 * 
-	 * @return player score
+	 * @return player's score
 	 */
 	public int getScore() {
 		int sum = 0;
@@ -97,7 +101,7 @@ public class Player {
 	}
 	/**Draws the striker of the player.
 	 * 
-	 * @param p PApplet to draw in
+	 * @param p non-null PApplet to draw in
 	 */
 	public void draw(PApplet p) {
 		//striker.setLoc(hitarea.getX()+hitarea.getWidth()/2, hitarea.getY()+hitarea.getHeight()/2, hitarea.getMinX(),hitarea.getMinY(),hitarea.getMaxX(),hitarea.getMaxY());

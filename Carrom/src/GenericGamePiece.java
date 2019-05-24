@@ -1,6 +1,6 @@
 import processing.core.PApplet;
 
-/**Superclass for all types of game pieces.
+/**Common piece used in Carrom. Represents a piece that is hit around and scored.
  * 
  * @author calix
  *

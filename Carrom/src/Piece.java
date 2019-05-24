@@ -163,6 +163,11 @@ public abstract class Piece {
 			this.y = y;
 		}
 	}
+	/**Set the location of this piece without restrictions.
+	 * 
+	 * @param x X coordinate
+	 * @param y Y coordinate
+	 */
 	public void setLoc(double x, double y ) {
 		this.x = x;
 		this.y = y;
