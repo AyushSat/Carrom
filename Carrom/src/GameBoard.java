@@ -234,15 +234,7 @@ public class GameBoard extends PApplet {
 				velX *= 3 * width / 100 / Math.sqrt(Math.pow(velX, 2) + Math.pow(velY, 2));
 				velY *= 3 * width / 100 / Math.sqrt(Math.pow(velX, 2) + Math.pow(velY, 2));
 			}
-			if (Math.abs(player.getHitarea().getCenterX() - width / 2) <= width / 10) {
-				if (velY / (player.getHitarea().getCenterY() - (height / 2)) > 0) {
-					velY = 0;
-				}
-			} else {
-				if (velX / (player.getHitarea().getCenterX() - (width / 2)) > 0) {
-					velX = 0;
-				}
-			}
+			
 			striker.setVelX(velX);
 			striker.setVelY(velY);
 			pushStyle();
@@ -421,11 +413,12 @@ public class GameBoard extends PApplet {
 		if (turnPhase == 1) {
 			turnPhase = 2;
 		}
+		/*
 		if (turnPhase == 0) {
 			striker.setLoc(mouseX, mouseY, this.width / 8 + BORDER_WIDTH, this.height / 8 + BORDER_WIDTH,
 					7 * this.width / 8 - BORDER_WIDTH, 7 * this.height / 8 - BORDER_WIDTH);
 		}
-
+		*/
 	}
 
 	public void keyPressed() {
