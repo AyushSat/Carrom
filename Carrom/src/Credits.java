@@ -28,10 +28,10 @@ public class Credits extends PApplet{
 		size((int)width, (int)height);
 	}
 	public void setup() {
-		//img = loadImage("data" + File.separator + "");
+		img = loadImage("data" + File.separator + "credits.png");
 	}
 	public void draw() {
-		image(img, 0, 0);
+		image(img, 0, 0, 1000, 980);
 	}
 	public void keyPressed() {
 
