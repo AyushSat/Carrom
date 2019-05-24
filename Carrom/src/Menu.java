@@ -31,7 +31,7 @@ public class Menu extends PApplet {
 	private PImage background;
 	private Music music;
 	private Thread t;
-	private static final File song = new File("data" + File.separator + "classic.wav");
+	private static final File song = new File("data" + File.separator + "music.wav");
 	private static final Color def = new Color(1, 8, 173);
 	private static final Color hov = new Color(0, 150, 203);
 
