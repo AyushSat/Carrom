@@ -47,7 +47,7 @@ public class GameBoard extends PApplet {
 		GenericGamePiece queen = new GenericGamePiece(0, 0, GenericGamePiece_RADIUS, 50);
 		queen.setColor(255, 0, 0);
 		pieces.add(queen);
-		
+
 		for (int i = 0; i < blacks; i++) {
 			GenericGamePiece black = new GenericGamePiece(0, 0, GenericGamePiece_RADIUS, 10);
 			black.setColor(0, 0, 0);
@@ -58,7 +58,7 @@ public class GameBoard extends PApplet {
 			white.setColor(255, 220, 150);
 			pieces.add(white);
 		}
-		
+
 		players = new ArrayList<Player>();
 
 		striker = new Striker(0, 0, GenericGamePiece_RADIUS * 4 / 3, 255, 255, 255);
@@ -93,9 +93,10 @@ public class GameBoard extends PApplet {
 	}
 
 	public void setup() {
-		frameRate(480);
+		frameRate(120);
 		double x = width / 2;
 		double y = height / 2;
+
 
 		pieces.get(0).setLoc(x, y);
 		pieces.get(1).setLoc(x + GenericGamePiece_RADIUS * Math.sin(Math.PI / 3) * 2,
@@ -165,16 +166,17 @@ public class GameBoard extends PApplet {
 	}
 
 	public void draw() {
-
-		Player player = players.get(playerTurn);
 		background(255);
+		Player player = players.get(playerTurn);
 		if (turnPhase != 3) {
-			imageMode(CENTER);
-			image(board, width / 2, height / 2, width * 0.75f, height * 0.75f);
-			textSize(width*.02f);
-			fill(0,0,255);
-			for(int i = 0; i < players.size();i++) {
-				text("Player " + (i+1), width/2 + 1.8f*((float)players.get(i).getHitarea().getCenterX()-width/2),height/2 + 1.8f*((float)players.get(i).getHitarea().getCenterY()-height/2) );
+				imageMode(CENTER);
+				image(board, width / 2, height / 2, width * 0.75f, height * 0.75f);
+			textSize(width * .02f);
+			fill(0, 0, 255);
+			for (int i = 0; i < players.size(); i++) {
+				text("Player " + (i + 1),
+						width / 2 + 1.8f * ((float) players.get(i).getHitarea().getCenterX() - width / 2),
+						height / 2 + 1.8f * ((float) players.get(i).getHitarea().getCenterY() - height / 2));
 			}
 			fill(0);
 		}
@@ -285,7 +287,7 @@ public class GameBoard extends PApplet {
 					p.collide(q, this.width / 8 + BORDER_WIDTH, this.height / 8 + BORDER_WIDTH,
 							7 * this.width / 8 - BORDER_WIDTH, 7 * this.height / 8 - BORDER_WIDTH);
 				}
-				
+
 			}
 			for (GenericGamePiece p : pieces) {
 				p.collide(striker, this.width / 8 + BORDER_WIDTH, this.height / 8 + BORDER_WIDTH,
@@ -402,7 +404,6 @@ public class GameBoard extends PApplet {
 			striker.setLoc(mouseX, mouseY, this.width / 8 + BORDER_WIDTH, this.height / 8 + BORDER_WIDTH,
 					7 * this.width / 8 - BORDER_WIDTH, 7 * this.height / 8 - BORDER_WIDTH);
 		}
-		
 
 	}
 
@@ -469,10 +470,8 @@ public class GameBoard extends PApplet {
 		// text(keyCode,100,100);
 	}
 
-	
 	public void exit() {
 		this.dispose();
 	}
 
-	
 }

@@ -66,11 +66,11 @@ public class Menu extends PApplet {
 
 	public void setup() {
 		background = loadImage("data" + File.separator + "backgroundMenu.png");
-		this.frameRate(120);
+		this.frameRate(60);
+		image(background, 0, 0, 1000, 980);
 	}
 
 	public void draw() {
-		image(background, 0, 0, 1000, 980);
 		if(level==2) {
 			twoPlayer.draw(this);
 			threePlayer.draw(this);
@@ -106,6 +106,7 @@ public class Menu extends PApplet {
 			if(back.getBoundingRectangle().contains(mouseX,mouseY)) {
 				level--;
 			}
+			image(background, 0, 0, 1000, 980);
 		}else if(level==0){
 			if (start.getBoundingRectangle().contains(mouseX, mouseY))
 				level++;
@@ -121,6 +122,7 @@ public class Menu extends PApplet {
 				else
 					music.play();
 			}
+			image(background, 0, 0, 1000, 980);
 		}else if(level==1) {
 			if(back.getBoundingRectangle().contains(mouseX,mouseY)) {
 				level--;
@@ -131,6 +133,7 @@ public class Menu extends PApplet {
 			if(networked.getBoundingRectangle().contains(mouseX,mouseY)) {
 				level++;
 			}
+			image(background, 0, 0, 1000, 980);
 		}
 		
 	}
