@@ -29,7 +29,7 @@ public class Music implements Runnable {
 			clip.open(AudioSystem.getAudioInputStream(music));
 
 			clip.start();
-			clip.loop(20); // 20 times is more than enough for the program to run
+			clip.loop(100); // 20 times is more than enough for the program to run
 
 		} catch (Exception e) { // Could possibly throw an error, AudioSystem requires a try and catch statement
 
