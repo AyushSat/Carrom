@@ -26,7 +26,16 @@ public class Credits extends PApplet{
 		//img = loadImage("data" + File.separator + "");
 	}
 	public void draw() {
-		image(img, 0, 0);
+		//image(img, 0, 0);
+		background(255);
+		fill(0);
+		textSize(50);
+		textAlign(CENTER,CENTER);
+		text("Code and backend by Calix",width/2,height/3);
+		text("Images by Akshat",width/2,height/2);
+		text("Networking by Ayush",width/2,height*2/3);
+		textSize(10);
+		text("hppeng",width*15/16,height*15/16);
 	}
 	public void keyPressed() {
 
