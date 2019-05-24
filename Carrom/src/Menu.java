@@ -96,7 +96,7 @@ public class Menu extends PApplet {
 			credits.draw(this);
 			m.draw(this);
 		}else if(level==1) {
-			networked.draw(this);
+			//networked.draw(this);
 			oneComputer.draw(this);
 			back.draw(this);
 		}
@@ -147,9 +147,9 @@ public class Menu extends PApplet {
 			if(oneComputer.getBoundingRectangle().contains(mouseX,mouseY)) {
 				level++;
 			}
-			if(networked.getBoundingRectangle().contains(mouseX,mouseY)) {
-				level++;
-			}
+//			if(networked.getBoundingRectangle().contains(mouseX,mouseY)) {
+//				level++;
+//			}
 			image(background, 0, 0, 1000, 980);
 		}
 		
