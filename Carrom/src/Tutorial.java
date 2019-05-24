@@ -22,7 +22,7 @@ public class Tutorial extends PApplet{
 	private int turnPhase;
 	private int progress;
 	
-	/**Makes a tutorial with the given width and height
+	/**Makes a tutorial with the given width and height0
 	 * 
 	 * @param width width of screen
 	 * @param height height of screen
