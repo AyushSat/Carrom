@@ -11,13 +11,13 @@ import processing.core.PImage;
 /**
  * PApplet for testing purposes
  * 
- * @author Akshat but later Calix
+ * @author Akshat and Calix
  * @version 5/6/19
  */
 public class Menu extends PApplet {
-	private Tutorial tutorial;
 	private Button start;
 	private Button credits;
+	private Button m;
 	private Button tut;
 	private Button twoPlayer;
 	private Button threePlayer;
@@ -31,27 +31,30 @@ public class Menu extends PApplet {
 	private PImage background;
 	private Music music;
 	private Thread t;
-	private static File song = new File("classic.wav");
+	private static final File song = new File("data" + File.separator + "classic.wav");
+	private static final Color def = new Color(1, 8, 173);
+	private static final Color hov = new Color(0, 150, 203);
 
 	public Menu(double width, double height) {
 		music = new Music(song);
 		t = new Thread(music);
 		t.start();
 		level = 0;
-		tutorial = null;
-		start = new Button(width*.5, height*.49, width*.2, height*.04, Color.CYAN, Color.BLUE, "Start", 50);
-		tut = new Button(width*.5, height*.55, width*.2, height*.04, Color.CYAN, Color.BLUE, "Tutorial",
+		start = new Button(width*.5, height*.49, width*.2, height*.04, hov, def, "Start", 50);
+		tut = new Button(width*.5, height*.55, width*.2, height*.04, hov, def, "Tutorial",
 				50);
-		credits = new Button(width*.5, height*.61, width*.2, height*.04, Color.CYAN, Color.BLUE, "Credits",
+		credits = new Button(width*.5, height*.61, width*.2, height*.04, hov, def, "Credits",
 				50);
-		twoPlayer = new Button(width*.5, height*.49, width*.2, height*.04, Color.CYAN, Color.BLUE, "2 players", 50);
-		threePlayer = new Button(width*.5, height*.55, width*.2, height*.04, Color.CYAN, Color.BLUE, "3 players",
+		m = new Button(width*.5, height*.73, width*.2, height*.04, hov, def, "Music",
 				50);
-		fourPlayer = new Button(width*.5, height*.61, width*.2, height*.04, Color.CYAN, Color.BLUE, "4 players",
+		twoPlayer = new Button(width*.5, height*.49, width*.2, height*.04, hov, def, "2 players", 50);
+		threePlayer = new Button(width*.5, height*.55, width*.2, height*.04, hov, def, "3 players",
 				50);
-		back = new Button(width*.5,height*.67,width*.2,height*.04, Color.CYAN, Color.BLUE, "Back", 50);
-		oneComputer = new Button(width*.5, height*.49, width*.2, height*.04, Color.CYAN, Color.BLUE, "1 Computer", 50);
-		networked = new Button(width*.5, height*.55, width*.2, height*.04, Color.CYAN, Color.BLUE, "Networked",
+		fourPlayer = new Button(width*.5, height*.61, width*.2, height*.04, hov, def, "4 players",
+				50);
+		back = new Button(width*.5,height*.67,width*.2,height*.04, hov, def, "Back", 50);
+		oneComputer = new Button(width*.5, height*.49, width*.2, height*.04, hov, def, "1 Computer", 50);
+		networked = new Button(width*.5, height*.55, width*.2, height*.04, hov, def, "Networked",
 				50);
 		w = width;
 		h = height;
@@ -63,6 +66,7 @@ public class Menu extends PApplet {
 
 	public void setup() {
 		background = loadImage("data" + File.separator + "backgroundMenu.png");
+		this.frameRate(120);
 	}
 
 	public void draw() {
@@ -76,6 +80,7 @@ public class Menu extends PApplet {
 			start.draw(this);
 			tut.draw(this);
 			credits.draw(this);
+			m.draw(this);
 		}else if(level==1) {
 			networked.draw(this);
 			oneComputer.draw(this);
@@ -107,7 +112,14 @@ public class Menu extends PApplet {
 			if (tut.getBoundingRectangle().contains(mouseX, mouseY))
 				tutorial();
 			if (credits.getBoundingRectangle().contains(mouseX, mouseY)) {
-				//tutorial();
+				credits();
+			}
+			if(m.getBoundingRectangle().contains(mouseX, mouseY)) {
+				m.toggleST();
+				if(m.getST())
+					music.pause();
+				else
+					music.play();
 			}
 		}else if(level==1) {
 			if(back.getBoundingRectangle().contains(mouseX,mouseY)) {
@@ -133,6 +145,7 @@ public class Menu extends PApplet {
 		back.setHover(back.getBoundingRectangle().contains(mouseX,mouseY));
 		oneComputer.setHover(oneComputer.getBoundingRectangle().contains(mouseX,mouseY));
 		networked.setHover(networked.getBoundingRectangle().contains(mouseX,mouseY));
+		m.setHover(m.getBoundingRectangle().contains(mouseX,mouseY));
 	}
 
 	public void keyPressed() {
@@ -159,10 +172,29 @@ public class Menu extends PApplet {
 	}
 
 	public void tutorial() {
-		tutorial = new Tutorial(width, height);
+		Tutorial tutorial = new Tutorial(width, height);
 		PApplet.runSketch(new String[] { "Tutorial" }, tutorial);
 
 		PSurfaceAWT surf = (PSurfaceAWT) tutorial.getSurface();
+		PSurfaceAWT.SmoothCanvas canvas = (PSurfaceAWT.SmoothCanvas) surf.getNative();
+		JFrame window = (JFrame) canvas.getFrame();
+
+		// window is 1000x1000 permanently
+		window.setSize(1000, 1000);
+		window.setMinimumSize(new Dimension(1000, 1000));
+		window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		window.setResizable(false);// a stretch is to change this
+
+		// make window visible
+		window.setVisible(true);
+		canvas.requestFocus();
+	}
+	
+	public void credits() {
+		Credits credits = new Credits(width, height);
+		PApplet.runSketch(new String[] { "Credits" }, credits);
+
+		PSurfaceAWT surf = (PSurfaceAWT) credits.getSurface();
 		PSurfaceAWT.SmoothCanvas canvas = (PSurfaceAWT.SmoothCanvas) surf.getNative();
 		JFrame window = (JFrame) canvas.getFrame();
 
