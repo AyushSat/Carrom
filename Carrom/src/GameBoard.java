@@ -19,6 +19,32 @@ import processing.event.MouseEvent;
  */
 public class GameBoard extends PApplet {
 
+	
+	/**The radius to be used by a normal piece if the with and height are 1000.
+	 * 
+	 */
+	public static final float GenericGamePiece_RADIUS = 14.5f;
+	/**The border width of the board if the with and height are 1000.
+	 * 
+	 */
+	public static final float BORDER_WIDTH = 28;
+	/**The movement increment for the striker if the with and height are 1000.
+	 * 
+	 */
+	public static final float MOVEMENT_INCREMENT = 10;
+	/**Point value of white pieces
+	 * 
+	 */
+	public static final int WHITE_VALUE = 20;
+	/**Point value of black pieces
+	 * 
+	 */
+	public static final int BLACK_VALUE = 10;
+	/**Point value of the queen piece.
+	 * 
+	 */
+	public static final int QUEEN_VALUE = 50;
+	
 	private ArrayList<GenericGamePiece> pieces;
 	private ArrayList<Player> players;
 	private int amtPlayers;
@@ -32,10 +58,6 @@ public class GameBoard extends PApplet {
 	private boolean chainTurn;
 	private int turnPhase;
 	private int playerTurn;
-
-	public static final float GenericGamePiece_RADIUS = 14.5f;
-	public static final float BORDER_WIDTH = 28;
-	public static final float MOVEMENT_INCREMENT = 10;
 
 	public GameBoard(int blacks, int whites) {
 		turnStreak = 0;
@@ -312,7 +334,7 @@ public class GameBoard extends PApplet {
 			}
 			if (stop) {
 				turnPhase = 0;
-				if (player.getLastPiece() != null && player.getLastPiece().getValue() == Tester.QUEEN_VALUE
+				if (player.getLastPiece() != null && player.getLastPiece().getValue() ==  QUEEN_VALUE
 						&& turnStreak > 0) {// this means player has not sunk anything and the queen was sunk last turn.
 					GenericGamePiece pi = player.removeCoin(); // must be the queen :)
 					if (pi != null) {

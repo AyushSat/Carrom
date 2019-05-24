@@ -33,10 +33,10 @@ public class Tutorial extends PApplet{
 		this.height = height;
 		turnPhase = 0;
 		pieces = new ArrayList<GenericGamePiece>();
-		pieces.add(new GenericGamePiece(0,0,Tester.GenericGamePiece_RADIUS,10));
-		pieces.add(new GenericGamePiece(0,0,Tester.GenericGamePiece_RADIUS,20));
-		pieces.add(new GenericGamePiece(0,0,Tester.GenericGamePiece_RADIUS,50));
-		striker = new Striker(0,0,Tester.GenericGamePiece_RADIUS*4/3);
+		pieces.add(new GenericGamePiece(0,0,GameBoard.GenericGamePiece_RADIUS,10));
+		pieces.add(new GenericGamePiece(0,0,GameBoard.GenericGamePiece_RADIUS,20));
+		pieces.add(new GenericGamePiece(0,0,GameBoard.GenericGamePiece_RADIUS,50));
+		striker = new Striker(0,0,GameBoard.GenericGamePiece_RADIUS*4/3);
 		//player = new Player(striker,new Rectangle2D.Double(0,0,0,0));
 	}
 	
@@ -98,15 +98,15 @@ public class Tutorial extends PApplet{
 			line((float)striker.getX(),(float)striker.getY(),(float)(striker.getX()+2*velX),(float)(striker.getY()+2*velY));
 			popStyle();
 		}else {
-			striker.move(this.width/8+Tester.BORDER_WIDTH,this.height/8+Tester.BORDER_WIDTH,7*this.width/8-Tester.BORDER_WIDTH,7*this.height/8-Tester.BORDER_WIDTH);
+			striker.move(this.width/8+GameBoard.BORDER_WIDTH,this.height/8+GameBoard.BORDER_WIDTH,7*this.width/8-GameBoard.BORDER_WIDTH,7*this.height/8-GameBoard.BORDER_WIDTH);
 			for(GenericGamePiece p : pieces) {
 				for(GenericGamePiece q: pieces) {
-					p.collide(q, this.width/8+Tester.BORDER_WIDTH,this.height/8+Tester.BORDER_WIDTH,7*this.width/8-Tester.BORDER_WIDTH,7*this.height/8-Tester.BORDER_WIDTH);		
+					p.collide(q, this.width/8+GameBoard.BORDER_WIDTH,this.height/8+GameBoard.BORDER_WIDTH,7*this.width/8-GameBoard.BORDER_WIDTH,7*this.height/8-GameBoard.BORDER_WIDTH);		
 				}
 			}
 			for(GenericGamePiece p : pieces) {
-				p.collide(striker, this.width/8+Tester.BORDER_WIDTH,this.height/8+Tester.BORDER_WIDTH,7*this.width/8-Tester.BORDER_WIDTH,7*this.height/8-Tester.BORDER_WIDTH);
-				p.move(this.width/8+Tester.BORDER_WIDTH,this.height/8+Tester.BORDER_WIDTH,7*this.width/8-Tester.BORDER_WIDTH,7*this.height/8-Tester.BORDER_WIDTH);
+				p.collide(striker, this.width/8+GameBoard.BORDER_WIDTH,this.height/8+GameBoard.BORDER_WIDTH,7*this.width/8-GameBoard.BORDER_WIDTH,7*this.height/8-GameBoard.BORDER_WIDTH);
+				p.move(this.width/8+GameBoard.BORDER_WIDTH,this.height/8+GameBoard.BORDER_WIDTH,7*this.width/8-GameBoard.BORDER_WIDTH,7*this.height/8-GameBoard.BORDER_WIDTH);
 				if(p.getValue() == 10)
 					p.draw(this, black);
 				else if(p.getValue() == 20)
@@ -117,18 +117,18 @@ public class Tutorial extends PApplet{
 			for (int i = 0; i < pieces.size(); i++) {
 				GenericGamePiece p = pieces.get(i);
 				// p.draw(this);
-				int pScore = p.score(this.width / 8 + Tester.BORDER_WIDTH, this.height / 8 + Tester.BORDER_WIDTH,
-						7 * this.width / 8 - Tester.BORDER_WIDTH, 7 * this.height / 8 - Tester.BORDER_WIDTH,
-						4 / 3 * Tester.GenericGamePiece_RADIUS);
+				int pScore = p.score(this.width / 8 + GameBoard.BORDER_WIDTH, this.height / 8 + GameBoard.BORDER_WIDTH,
+						7 * this.width / 8 - GameBoard.BORDER_WIDTH, 7 * this.height / 8 - GameBoard.BORDER_WIDTH,
+						4 / 3 * GameBoard.GenericGamePiece_RADIUS);
 				if (pScore > 0) {
 					p.setLoc(p.getInitialX(), p.getInitialY());
 					p.setVelX(0);
 					p.setVelY(0);
 				}
 			}
-			if(striker.score(this.width / 8 + Tester.BORDER_WIDTH, this.height / 8 + Tester.BORDER_WIDTH,
-						7 * this.width / 8 - Tester.BORDER_WIDTH, 7 * this.height / 8 - Tester.BORDER_WIDTH,
-						4 / 3 * Tester.GenericGamePiece_RADIUS)<0) {
+			if(striker.score(this.width / 8 + GameBoard.BORDER_WIDTH, this.height / 8 + GameBoard.BORDER_WIDTH,
+						7 * this.width / 8 - GameBoard.BORDER_WIDTH, 7 * this.height / 8 - GameBoard.BORDER_WIDTH,
+						4 / 3 * GameBoard.GenericGamePiece_RADIUS)<0) {
 				striker.setLoc(width/2, height/5);
 				striker.setVelX(0);
 				striker.setVelY(0);
@@ -182,7 +182,7 @@ public class Tutorial extends PApplet{
 	public void keyPressed() {
 		if(turnPhase==0) {
 			if(keyCode==37) { //left arrow
-				striker.setLoc(striker.getX()-Tester.MOVEMENT_INCREMENT,striker.getY());
+				striker.setLoc(striker.getX()-GameBoard.MOVEMENT_INCREMENT,striker.getY());
 				for(GenericGamePiece p : pieces) {
 					if(striker.isColliding(p)) {
 						striker.setLoc(p.getX()-striker.getRadius()-p.getRadius(), striker.getY());			
@@ -190,7 +190,7 @@ public class Tutorial extends PApplet{
 				}				
 			}
 			if(keyCode==39) { //right arrow
-				striker.setLoc(striker.getX()+Tester.MOVEMENT_INCREMENT,striker.getY());
+				striker.setLoc(striker.getX()+GameBoard.MOVEMENT_INCREMENT,striker.getY());
 				for(GenericGamePiece p : pieces) {
 					if(striker.isColliding(p)) {
 						striker.setLoc(p.getX()+striker.getRadius()+p.getRadius(), striker.getY());			
@@ -198,7 +198,7 @@ public class Tutorial extends PApplet{
 				}
 			}
 			if(keyCode==38) { //up arrow
-				striker.setLoc(striker.getX(),striker.getY()-Tester.MOVEMENT_INCREMENT);
+				striker.setLoc(striker.getX(),striker.getY()-GameBoard.MOVEMENT_INCREMENT);
 				for(GenericGamePiece p : pieces) {
 					if(striker.isColliding(p)) {
 						striker.setLoc(striker.getX(), p.getY()-striker.getRadius()-p.getRadius());;			
@@ -206,7 +206,7 @@ public class Tutorial extends PApplet{
 				}	
 			}
 			if(keyCode==40) { //down arrow
-				striker.setLoc(striker.getX(),striker.getY()+Tester.MOVEMENT_INCREMENT);
+				striker.setLoc(striker.getX(),striker.getY()+GameBoard.MOVEMENT_INCREMENT);
 				for(GenericGamePiece p : pieces) {
 					if(striker.isColliding(p)) {
 						striker.setLoc(striker.getX(), p.getY()+striker.getRadius()+p.getRadius());			
