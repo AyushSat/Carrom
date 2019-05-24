@@ -78,7 +78,7 @@ public abstract class Piece {
 	 * @param R red value
 	 * @param G green value
 	 * @param B blue value
-	 * @precondition R, G, and B are between 0 and 255, inclusive.
+	 * @pre R, G, and B are between 0 and 255, inclusive.
 	 */
 	public void setColor(int R, int G, int B) {
 		this.R = R;
@@ -272,6 +272,10 @@ public abstract class Piece {
 	/**This method will make one piece collide with many others
 	 * 
 	 * @param others the ArrayList of Pieces that this piece should collide with
+	 * @param minX left boundary
+	 * @param minY top boundary
+	 * @param maxX right boundary
+	 * @param maxY bottom boundary
 	 */
 	public void collide(ArrayList<Piece> others,double minX, double minY, double maxX, double maxY) {
 		for(Piece that : others) {
@@ -376,7 +380,7 @@ public abstract class Piece {
 	 * @param maxX right boundary
 	 * @param maxY top boundary
 	 * @param radius radius of the hole in the corner
-	 * @precondition: all parameters must be valid and accurate as to the actual board which the piece is located on
+	 * @pre all parameters must be valid and accurate as to the actual board which the piece is located on
 	 * @return The score that the piece should net at its current XY location in those bounds
 	 */
 	public abstract int score(double minX, double minY, double maxX, double maxY, double radius);
