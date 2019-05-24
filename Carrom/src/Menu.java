@@ -11,13 +11,14 @@ import processing.core.PImage;
 /**
  * PApplet for testing purposes
  * 
- * @author Akshat but later Calix
+ * @author Akshat and Calix
  * @version 5/6/19
  */
 public class Menu extends PApplet {
 	private Tutorial tutorial;
 	private Button start;
 	private Button credits;
+	private Button m;
 	private Button tut;
 	private Button twoPlayer;
 	private Button threePlayer;
@@ -44,6 +45,8 @@ public class Menu extends PApplet {
 				50);
 		credits = new Button(width*.5, height*.61, width*.2, height*.04, Color.CYAN, Color.BLUE, "Credits",
 				50);
+		m = new Button(width*.5, height*.73, width*.2, height*.04, Color.CYAN, Color.BLUE, "Music",
+				50);
 		twoPlayer = new Button(width*.5, height*.49, width*.2, height*.04, Color.CYAN, Color.BLUE, "2 players", 50);
 		threePlayer = new Button(width*.5, height*.55, width*.2, height*.04, Color.CYAN, Color.BLUE, "3 players",
 				50);
@@ -63,6 +66,7 @@ public class Menu extends PApplet {
 
 	public void setup() {
 		background = loadImage("data" + File.separator + "backgroundMenu.png");
+		this.frameRate(120);
 	}
 
 	public void draw() {
@@ -76,6 +80,7 @@ public class Menu extends PApplet {
 			start.draw(this);
 			tut.draw(this);
 			credits.draw(this);
+			m.draw(this);
 		}else if(level==1) {
 			networked.draw(this);
 			oneComputer.draw(this);
@@ -109,6 +114,13 @@ public class Menu extends PApplet {
 			if (credits.getBoundingRectangle().contains(mouseX, mouseY)) {
 				//tutorial();
 			}
+			if(m.getBoundingRectangle().contains(mouseX, mouseY)) {
+				m.toggleST();
+				if(m.getST())
+					music.pause();
+				else
+					music.play();
+			}
 		}else if(level==1) {
 			if(back.getBoundingRectangle().contains(mouseX,mouseY)) {
 				level--;
@@ -133,6 +145,7 @@ public class Menu extends PApplet {
 		back.setHover(back.getBoundingRectangle().contains(mouseX,mouseY));
 		oneComputer.setHover(oneComputer.getBoundingRectangle().contains(mouseX,mouseY));
 		networked.setHover(networked.getBoundingRectangle().contains(mouseX,mouseY));
+		m.setHover(m.getBoundingRectangle().contains(mouseX,mouseY));
 	}
 
 	public void keyPressed() {

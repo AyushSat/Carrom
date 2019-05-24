@@ -1,4 +1,4 @@
-//Author: Gokulkrishnan Harikrishnan
+//Akshat Jain
 //Period: 1
 //Purpose: Object that plays music with methods to pause and play music. Is played using a thread.
 //Date: 05-11-2018
