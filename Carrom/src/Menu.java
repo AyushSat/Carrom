@@ -70,7 +70,7 @@ public class Menu extends PApplet {
 		background = loadImage("data" + File.separator + "backgroundMenu.png");
 		this.frameRate(60);
 		image(background, 0, 0, 1000, 980);
-		font = createFont("AbhayaLibre-Regular.ttf", 20);
+		font = createFont("AbhayaLibre-Bold.ttf", 20);
 		start.setFont(font);
 		tut.setFont(font);
 		credits.setFont(font);
