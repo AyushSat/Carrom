@@ -3,6 +3,7 @@ import java.awt.geom.Rectangle2D;
 
 import processing.core.PApplet;
 import processing.core.PConstants;
+import processing.core.PFont;
 
 /**
  * Represents a PApplet Button!
@@ -23,6 +24,7 @@ public class Button {
 	private boolean pressed;
 	private String text;
 	private boolean st;
+	private PFont font;
 
 	/**
 	 * 
@@ -45,6 +47,7 @@ public class Button {
 		round = r;
 		pressed = false;
 		st = false;
+		font = null;
 	}
 
 	/**
@@ -60,6 +63,7 @@ public class Button {
 		marker.rectMode(PConstants.CENTER);
 		marker.rect((float) x, (float) y, (float) width, (float) height, round);
 		marker.fill(255);
+		marker.textFont(font);
 		marker.textSize((float) height - 10);
 		marker.text(text, (float) (x - marker.textWidth(text) / 2), (float) (y) + marker.textAscent() / 2 - 5);
 		if (st) {
@@ -99,6 +103,10 @@ public class Button {
 
 	public void toggleST() {
 		st = !st;
+	}
+	
+	public void setFont(PFont f) {
+		font = f;
 	}
 
 }

@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 
 import processing.awt.PSurfaceAWT;
 import processing.core.PApplet;
+import processing.core.PFont;
 import processing.core.PImage;
 
 /**
@@ -34,6 +35,7 @@ public class Menu extends PApplet {
 	private static final File song = new File("data" + File.separator + "music.wav");
 	private static final Color def = new Color(1, 8, 173);
 	private static final Color hov = new Color(0, 150, 203);
+	private PFont font;
 
 	public Menu(double width, double height) {
 		music = new Music(song);
@@ -68,6 +70,18 @@ public class Menu extends PApplet {
 		background = loadImage("data" + File.separator + "backgroundMenu.png");
 		this.frameRate(60);
 		image(background, 0, 0, 1000, 980);
+		font = createFont("AbhayaLibre-Regular.ttf", 20);
+		start.setFont(font);
+		tut.setFont(font);
+		credits.setFont(font);
+		m.setFont(font);
+		twoPlayer.setFont(font);
+		threePlayer.setFont(font);
+		fourPlayer.setFont(font);
+		back.setFont(font);
+		oneComputer.setFont(font);
+		networked.setFont(font);
+		
 	}
 
 	public void draw() {
