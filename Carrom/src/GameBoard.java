@@ -97,7 +97,6 @@ public class GameBoard extends PApplet {
 		double x = width / 2;
 		double y = height / 2;
 
-
 		pieces.get(0).setLoc(x, y);
 		pieces.get(1).setLoc(x + GenericGamePiece_RADIUS * Math.sin(Math.PI / 3) * 2,
 				y + GenericGamePiece_RADIUS * Math.cos(Math.PI / 3) * 2 + GenericGamePiece_RADIUS * 2);
@@ -169,8 +168,8 @@ public class GameBoard extends PApplet {
 		background(255);
 		Player player = players.get(playerTurn);
 		if (turnPhase != 3) {
-				imageMode(CENTER);
-				image(board, width / 2, height / 2, width * 0.75f, height * 0.75f);
+			imageMode(CENTER);
+			image(board, width / 2, height / 2, width * 0.75f, height * 0.75f);
 			textSize(width * .02f);
 			fill(0, 0, 255);
 			for (int i = 0; i < players.size(); i++) {
@@ -409,46 +408,60 @@ public class GameBoard extends PApplet {
 
 	public void keyPressed() {
 		if (turnPhase == 0) {
+			boolean colliding = false;
 			Player player = players.get(playerTurn);
 			Rectangle2D.Double bounds = player.getHitarea();
 			if (keyCode == 37) { // left arrow
-				striker.setLoc(striker.getX() - MOVEMENT_INCREMENT, striker.getY(), bounds.getMinX(), bounds.getMinY(),
-						bounds.getMaxX(), bounds.getMaxY());
+
 				for (GenericGamePiece p : pieces) {
 					if (striker.isColliding(p)) {
 						striker.setLoc(p.getX() - striker.getRadius() - p.getRadius(), striker.getY(), bounds.getMinX(),
 								bounds.getMinY(), bounds.getMaxX(), bounds.getMaxY());
+						colliding = true;
 					}
+				}
+				if (!colliding) {
+					striker.setLoc(striker.getX() - MOVEMENT_INCREMENT, striker.getY(), bounds.getMinX(),
+							bounds.getMinY(), bounds.getMaxX(), bounds.getMaxY());
 				}
 			}
 			if (keyCode == 39) { // right arrow
-				striker.setLoc(striker.getX() + MOVEMENT_INCREMENT, striker.getY(), bounds.getMinX(), bounds.getMinY(),
-						bounds.getMaxX(), bounds.getMaxY());
 				for (GenericGamePiece p : pieces) {
 					if (striker.isColliding(p)) {
 						striker.setLoc(p.getX() + striker.getRadius() + p.getRadius(), striker.getY(), bounds.getMinX(),
 								bounds.getMinY(), bounds.getMaxX(), bounds.getMaxY());
+						colliding = true;
 					}
+				}
+				if (!colliding) {
+					striker.setLoc(striker.getX() + MOVEMENT_INCREMENT, striker.getY(), bounds.getMinX(),
+							bounds.getMinY(), bounds.getMaxX(), bounds.getMaxY());
 				}
 			}
 			if (keyCode == 38) { // up arrow
-				striker.setLoc(striker.getX(), striker.getY() - MOVEMENT_INCREMENT, bounds.getMinX(), bounds.getMinY(),
-						bounds.getMaxX(), bounds.getMaxY());
 				for (GenericGamePiece p : pieces) {
 					if (striker.isColliding(p)) {
 						striker.setLoc(striker.getX(), p.getY() - striker.getRadius() - p.getRadius(), bounds.getMinX(),
 								bounds.getMinY(), bounds.getMaxX(), bounds.getMaxY());
+						colliding = true;
 					}
+				}
+				if (!colliding) {
+					striker.setLoc(striker.getX(), striker.getY() - MOVEMENT_INCREMENT, bounds.getMinX(),
+							bounds.getMinY(), bounds.getMaxX(), bounds.getMaxY());
 				}
 			}
 			if (keyCode == 40) { // down arrow
-				striker.setLoc(striker.getX(), striker.getY() + MOVEMENT_INCREMENT, bounds.getMinX(), bounds.getMinY(),
-						bounds.getMaxX(), bounds.getMaxY());
 				for (GenericGamePiece p : pieces) {
 					if (striker.isColliding(p)) {
 						striker.setLoc(striker.getX(), p.getY() + striker.getRadius() + p.getRadius(), bounds.getMinX(),
 								bounds.getMinY(), bounds.getMaxX(), bounds.getMaxY());
+						colliding = true;
 					}
+				}
+				if (!colliding) {
+					striker.setLoc(striker.getX(), striker.getY() + MOVEMENT_INCREMENT, bounds.getMinX(),
+							bounds.getMinY(), bounds.getMaxX(), bounds.getMaxY());
 				}
 			}
 			if (keyCode == 10) {
@@ -458,6 +471,7 @@ public class GameBoard extends PApplet {
 		if (keyCode == 8 && turnPhase == 1) {
 			turnPhase = 0;
 		}
+		/*
 		if (keyCode == 83) {
 			for (GenericGamePiece p : pieces) {
 				p.setVelX(0);
@@ -466,7 +480,7 @@ public class GameBoard extends PApplet {
 			striker.setVelX(0);
 			striker.setVelY(0);
 		}
-
+		 */
 		// text(keyCode,100,100);
 	}
 
