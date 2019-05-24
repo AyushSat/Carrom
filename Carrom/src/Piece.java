@@ -6,7 +6,7 @@ import processing.core.PImage;
 
 /**Represents a circular piece. It is an interactive, moving piece. 
  * 
- * @author calix
+ * @author Calix
  *
  */
 public abstract class Piece {

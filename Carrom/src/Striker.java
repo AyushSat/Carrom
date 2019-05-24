@@ -1,6 +1,6 @@
 import processing.core.PApplet;
 
-/**
+/** A Piece object that represents the Striker object for the GameBoard
  * 
  * @author Calix
  *

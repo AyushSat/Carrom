@@ -21,13 +21,14 @@ public class Button {
 	private Color defaultColor;
 	private Color hoverColor;
 	private boolean hovered;
-	private boolean pressed;
 	private String text;
 	private boolean st;
 	private PFont font;
 
 	/**
 	 * 
+	 * @param xVal x coordinate location of the button's center
+	 * @param yVal y coordinate location of the button's center
 	 * @param w  width of the button
 	 * @param h  height of the button
 	 * @param dC Color of button when button it is not being hovered over
@@ -45,7 +46,6 @@ public class Button {
 		hovered = false;
 		text = t;
 		round = r;
-		pressed = false;
 		st = false;
 		font = null;
 	}
@@ -77,16 +77,12 @@ public class Button {
 		marker.popStyle();
 	}
 
+	/**
+	 * 
+	 * @param h the boolean that regarding whether there is a cursor on this Button ot not
+	 */
 	public void setHover(boolean h) {
 		hovered = h;
-	}
-
-	public void setPressed(boolean p) {
-		pressed = p;
-	}
-
-	public boolean getPressed() {
-		return pressed;
 	}
 
 	/**
@@ -97,14 +93,25 @@ public class Button {
 		return new Rectangle2D.Double(x - width / 2, y - height / 2, width, height);
 	}
 	
+	/*
+	 * 
+	 * @return a boolean whether this button has a strike through or not
+	 */
 	public boolean getST() {
 		return st;
 	}
 
+	/** Adds a strike through is there isn't one and removes it if there is already one
+	 * 
+	 */
 	public void toggleST() {
 		st = !st;
 	}
 	
+	/**
+	 * 
+	 * @param f the PFont that the text of this Button should have
+	 */
 	public void setFont(PFont f) {
 		font = f;
 	}

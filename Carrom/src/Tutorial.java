@@ -6,7 +6,7 @@ import processing.core.PApplet;
 /**This class is a PApplet window that represents a tutorial screen. 
  * It might be impolemented to teach players the mechanics and controls of Carrom.
  * 
- * @author calix
+ * @author Calix
  *
  */
 public class Tutorial extends PApplet{

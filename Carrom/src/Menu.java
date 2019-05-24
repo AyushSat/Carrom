@@ -9,8 +9,8 @@ import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PImage;
 
-/**
- * PApplet for testing purposes
+/** The Menu page of the game
+ * 
  * 
  * @author Akshat and Calix
  * @version 5/6/19

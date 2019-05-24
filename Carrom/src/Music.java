@@ -1,27 +1,27 @@
-//Akshat Jain
-//Period: 1
-//Purpose: Object that plays music with methods to pause and play music. Is played using a thread.
-//Date: 05-11-2018
-//Revision: 2
-
 import java.io.File;
 import javax.sound.sampled.*;
 
+/** The object that takes in a File path for a music file and can play and pause the music file
+ * 
+ * @author Akshat Jain
+ *
+ */
 public class Music implements Runnable {
 
-	// Music field
-	private static File music;
-
-	// Clip field
+	private File music;
 	private Clip clip;
 
-	// Music object, called in the thread's initialization
-	public Music(File m) {
-		music = m;
+	/**
+	 * 
+	 * @param file File object with the path that leads to the music file
+	 */
+	public Music(File file) {
+		music = file;
 	}
 
-	// Called by thread, starts the music
-	@Override
+	/** Starts playing the music file
+	 * 
+	 */
 	public void run() {
 
 		try {
@@ -36,12 +36,16 @@ public class Music implements Runnable {
 		}
 	}
 
-	// Pause music
+	/** Pauses the music file
+	 * 
+	 */
 	public void pause() {
 		clip.stop();
 	}
 
-	// Play music
+	/** Continues the music file after being stopped
+	 * 
+	 */
 	public void play() {
 		clip.start();
 	}

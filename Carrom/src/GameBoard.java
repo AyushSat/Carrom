@@ -486,17 +486,6 @@ public class GameBoard extends PApplet {
 		if (keyCode == 8 && turnPhase == 1) {
 			turnPhase = 0;
 		}
-		/*
-		if (keyCode == 83) {
-			for (GenericGamePiece p : pieces) {
-				p.setVelX(0);
-				p.setVelY(0);
-			}
-			striker.setVelX(0);
-			striker.setVelY(0);
-		}
-		 */
-		// text(keyCode,100,100);
 	}
 
 	public void exit() {

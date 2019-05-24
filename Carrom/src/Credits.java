@@ -5,7 +5,7 @@ import processing.core.PImage;
 
 /**
  * 
- * @author ajain027
+ * @author Akshat Jain
  *
  */
 public class Credits extends PApplet{

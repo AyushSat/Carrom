@@ -2,7 +2,7 @@ import processing.core.PApplet;
 
 /**Common piece used in Carrom. Represents a piece that is hit around and scored.
  * 
- * @author calix
+ * @author Calix
  *
  */
 public class GenericGamePiece extends Piece{
