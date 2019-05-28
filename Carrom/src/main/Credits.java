@@ -1,3 +1,4 @@
+package main;
 import java.io.File;
 
 import processing.core.PApplet;

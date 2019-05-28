@@ -1,3 +1,4 @@
+package main;
 import processing.core.PApplet;
 
 /**Common piece used in Carrom. Represents a piece that is hit around and scored.

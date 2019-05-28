@@ -1,3 +1,5 @@
+package main;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import processing.core.PApplet;
@@ -9,7 +11,7 @@ import processing.core.PImage;
  * @author Calix
  *
  */
-public abstract class Piece {
+public abstract class Piece implements Serializable {
 	protected double initialX;
 	protected double initialY;
 	protected double x;
@@ -19,6 +21,8 @@ public abstract class Piece {
 	protected double radius;
 	protected int R, G, B;
 	protected double friction;
+	
+	private static final long serialVersionUID = 4L;
 	
 	/**An epsilon representing the threshold for motion to be considered not motion.
 	 * 

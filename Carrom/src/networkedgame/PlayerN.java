@@ -1,5 +1,8 @@
+package networkedgame;
+import main.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.Rectangle2D.Double;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import processing.core.PApplet;
@@ -9,21 +12,22 @@ import processing.core.PApplet;
  * @author Ayush
  *
  */
-public class Player {
+public class PlayerN implements Serializable{
 	private Striker striker;
 	private Rectangle2D.Double hitarea;
 	private ArrayList<GenericGamePiece> myPieces;
-	/**Instantiates a player with a striker it will use and a hit area
-	 * 
-	 * @param striker The striker the player will use
-	 * @param hitarea A 2D Rectangle representing where the striker will be confined to.
-	 */
-	public Player(Striker striker, Rectangle2D.Double hitarea) {
+	public String host;
+	
+	private static final long serialVersionUID = 1L;
+	
+	public PlayerN(Striker striker, Double hitarea, String host) {
 		super();
+		this.host = host;
 		this.striker = striker;
 		this.hitarea = hitarea;
 		this.myPieces = new ArrayList<GenericGamePiece>();
 	}
+	
 	public Striker getStriker() {
 		return striker;
 	}
@@ -37,10 +41,6 @@ public class Player {
 		this.hitarea = hitarea;
 	}
 	
-	/**Add a coin into the player's sunk pieces
-	 * 
-	 * @param piece the piece to add
-	 */
 	public void addCoin(GenericGamePiece piece) {
 		myPieces.add(piece);
 	}
@@ -74,9 +74,18 @@ public class Player {
 		}
 		return null;
 	}
+	
+	public GenericGamePiece getLastPiece() {
+		if(myPieces.size()==0) {
+			return null;
+		}
+		return myPieces.get(myPieces.size()-1);
+	}
+	
+	
 	/**Returns the player's score according to coins pocketed
 	 * 
-	 * @return player's score
+	 * @return player score
 	 */
 	public int getScore() {
 		int sum = 0;
@@ -89,23 +98,18 @@ public class Player {
 	public ArrayList<GenericGamePiece> getPieces(){
 		return myPieces;
 	}
-	/**Returns the last piece sunk by the player. If the player has not sunk any pieces, returns null.
-	 * 
-	 * @return last piece or null.
-	 */
-	public GenericGamePiece getLastPiece() {
-		if(myPieces.size()==0) {
-			return null;
-		}
-		return myPieces.get(myPieces.size()-1);
-	}
+	
 	/**Draws the striker of the player.
 	 * 
-	 * @param p non-null PApplet to draw in
+	 * @param p PApplet to draw in
 	 */
 	public void draw(PApplet p) {
 		//striker.setLoc(hitarea.getX()+hitarea.getWidth()/2, hitarea.getY()+hitarea.getHeight()/2, hitarea.getMinX(),hitarea.getMinY(),hitarea.getMaxX(),hitarea.getMaxY());
 		striker.draw(p);
+	}
+	
+	public String getHost() {
+		return host;
 	}
 	
 }

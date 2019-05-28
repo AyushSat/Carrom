@@ -1,9 +1,12 @@
+package main;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.io.File;
 
 import javax.swing.JFrame;
 
+import networkedgame.NetworkedGameBoard;
+import networking.frontend.NetworkManagementPanel;
 import processing.awt.PSurfaceAWT;
 import processing.core.PApplet;
 import processing.core.PFont;
@@ -96,7 +99,7 @@ public class Menu extends PApplet {
 			credits.draw(this);
 			m.draw(this);
 		}else if(level==1) {
-			//networked.draw(this);
+			networked.draw(this);
 			oneComputer.draw(this);
 			back.draw(this);
 		}
@@ -147,14 +150,37 @@ public class Menu extends PApplet {
 			if(oneComputer.getBoundingRectangle().contains(mouseX,mouseY)) {
 				level++;
 			}
-//			if(networked.getBoundingRectangle().contains(mouseX,mouseY)) {
-//				level++;
-//			}
+			if(networked.getBoundingRectangle().contains(mouseX,mouseY)) {
+				level = 3;
+			}
 			image(background, 0, 0, 1000, 980);
+		}
+		
+		if(level == 3) {
+			networking();
+			level = 0;
 		}
 		
 	}
 
+	public void networking() {
+		NetworkedGameBoard drawing = new NetworkedGameBoard(9,9);
+		PApplet.runSketch(new String[]{""}, drawing);
+		PSurfaceAWT surf = (PSurfaceAWT) drawing.getSurface();
+		PSurfaceAWT.SmoothCanvas canvas = (PSurfaceAWT.SmoothCanvas) surf.getNative();
+		JFrame window = (JFrame)canvas.getFrame();
+
+		// window is 1000x1000 permanently
+				window.setSize(1000, 1000);
+				window.setMinimumSize(new Dimension(1000, 1000));
+				window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+				window.setResizable(true);// a stretch is to change this
+
+		window.setVisible(true);
+		
+		NetworkManagementPanel nmp = new NetworkManagementPanel("ProcessingDrawing", 6, drawing);
+	}
+	
 	public void mouseMoved() {
 		start.setHover(start.getBoundingRectangle().contains(mouseX, mouseY));
 		tut.setHover(tut.getBoundingRectangle().contains(mouseX, mouseY));
